@@ -56,7 +56,7 @@ BGHZ_LoadBoss:
 
 		dbf	d1,BGHZ_Loop				; repeat sequence 2 more times
 
-; loc_17772
+; loc_B064:
 BGHZ_Done:
 		move.w	obX(a0),obBossX(a0) 			; copy to boss position using scratch RAM (objoff_30 and 38 respectively)
 		move.w	obY(a0),obBossY(a0)
@@ -96,7 +96,7 @@ BGHZ_ShipStart:
 		move.w	#0,obVelY(a0)				; stop ship
 		addq.b	#2,ob2ndRout(a0) 			; goto next routine
 
-; loc_177E6:
+; loc_B0D2:
 BGHZ_ShipUpdate:
 		move.b	BGHZ_SineCounter(a0),d0 		; set up some scratch RAM for a sine counter
 		jsr	(CalcSine).l 				; result gets put into d0
@@ -125,19 +125,19 @@ BGHZ_ShipUpdate:
 		bne.s	.writeColor   				; if not black, already white, so branch
 		move.w	#cWhite,d0				; move 0EEE (white)
 
-; loc_1783C:
+; loc_B128:
 .writeColor:
 		move.w	d0,(a1)					; load color stored in d0
 		subq.b	#1,obBossFlash(a0) 			; subtract 1 from flash timer
 		bne.s	.exit 					; keep flashing if obBossFlash is not 0
 		move.b	#col_48x48|col_boss,obColType(a0) 	; restore collision, the timer has hit 0
 
-;locret_1784A:
+; locret_B136:
 .exit:
 		rts
 ; ===========================================================================
 
-; loc_1784C:
+; loc_B138:
 BGHZ_Defeated:
 		move.b	#8,ob2ndRout(a0) 			; set object routine to BGHZ_Explode
 		move.w	#$B3,BGHZ_BossGenericTimer(a0) 		; set the boss timer
@@ -169,11 +169,11 @@ BGHZ_MakeBall:
 		move.w	obBossY(a0),obY(a1)
 		move.l	a0,BGHZ_ParentObj(a1) 			; same thing as way up in LoadBoss, store a pointer of the main boss object for future reference
 
-; loc_17910:
+; loc_B1F2:
 .skip:
 		move.w	#120-1,BGHZ_BossGenericTimer(a0) 		; set a timer to 2 seconds (120 frames) after ball logic is complete
 
-; loc_17916:
+; loc_B1F8:
 .return:
 		bra.w	BGHZ_ShipUpdate
 ; ===========================================================================
@@ -194,12 +194,12 @@ BGHZ_Reverse:
 		bne.s	.facingRight 				; if yes, branch
 		neg.w	obVelX(a0)				; reverse direction of the ship
 
-; loc_17950:
+; loc_B232:
 .facingRight:
 		bra.w	BGHZ_ShipUpdate
 ; ===========================================================================
 
-; loc_17954:
+; loc_B236:
 BGHZ_ChgDir:
 		subq.w	#1,BGHZ_BossGenericTimer(a0) 		; has the timer gone below 0?
 		bmi.s	.flipDirection 				; if so, branch
@@ -207,26 +207,26 @@ BGHZ_ChgDir:
 		bra.s	.return
 ; ===========================================================================
 
-; loc_17960:
+; loc_B242:
 .flipDirection:
 		bchg	#0,obStatus(a0) 			; flip bit 0 (flip direction of ship)
 		move.w	#64-1,BGHZ_BossGenericTimer(a0) 	; set timer to 64 frames, slight wait before changing direction
 		subq.b	#2,ob2ndRout(a0) 			; go back to ShipMove
 		move.w	#0,obVelX(a0) 				; stand still
 
-; loc_17960:
-.return
+; loc_B258:
+.return:
 		bra.w	BGHZ_ShipUpdate
 ; ===========================================================================
 
-; loc_1797A:
+; loc_B25C:
 BGHZ_Explode:
 		subq.w	#1,BGHZ_BossGenericTimer(a0) 		; are we done exploding?
 		bmi.s	.stopExplosions 			; yes, stop explosions
 		bra.w	BossDefeated
 ; ===========================================================================
 
-; loc_17984:
+; loc_B266:
 .stopExplosions:
 		bset	#0,obStatus(a0) 			; set bit 0 to 1 (facing right)
 		bclr	#7,obStatus(a0) 			; clear destroyed/defeated flag (flag is set in sub ReactToItem.asm)
@@ -237,12 +237,12 @@ BGHZ_Explode:
 		bne.s	.exit 					; if yes, leave early
 		move.b	#1,(v_bossstatus).w 			; set the boss as defeated
 
-; locret_179AA:
+; locret_B28E:
 .exit:
 		rts
 ; ===========================================================================
 
-; loc_179F6:
+; loc_B290:
 BGHZ_Escape:
 		cmpi.w	#boss_ghz_end,(v_limitright2).w 	; have we finished scrolling to the right (reached level bounds)?
 		beq.s	.checkOffScreen 			; if so, branch
@@ -250,7 +250,7 @@ BGHZ_Escape:
 		bra.s	.flee
 ; ===========================================================================
 
-; loc_17A10:
+; loc_B29E:
 .checkOffScreen:
 		tst.b	obRender(a0) 				; has Eggman left the screen (is bit 7 clear)?
 	if FixBugs
@@ -259,7 +259,7 @@ BGHZ_Escape:
 		bpl.w	DeleteObject 				; yes, bit 7 is cleared, so we can delete the object (this leverages signed numbers!)
 	endif
 
-; loc_17A16:
+; loc_B2A6:
 .flee:
 		bsr.w	BossMove
 		bra.w	BGHZ_ShipUpdate
@@ -368,7 +368,7 @@ GBall_MakeLinks:
 		move.b	#1,obFrame(a1)				; set current animation frame
 		addq.b	#1,obSubtype(a0)			; set subtype of wrecking ball object to 1
 
-; loc_17B60:
+; loc_B3AC:
 GBall_LinkSetup:
 		move.w	a1,d5					; move lower word of address into d5
 		subi.w	#v_objspace&$FFFF,d5			; create a byte offset within object (this is to save space)
@@ -401,7 +401,7 @@ GBall_Base:	; Routine 2
 		moveq	#0,d6
 		move.b	(a2)+,d6				; move current index value and increment (this contains how many links were spawned due to the addq.b above)
 
-; loc_17BC6:
+; loc_B412:
 .convertIndex:
 		moveq	#0,d4
 		move.b	(a2)+,d4				; move current index value and increment address
@@ -413,7 +413,7 @@ GBall_Base:	; Routine 2
 		beq.s	.skip					; if yes, branch
 		addq.b	#1,GBall_LinkDist(a1)			; no, increment by 1 (keep extending)
 
-; loc_17BE0:
+; loc_B42C:
 .skip:
 		dbf	d6,.convertIndex			; decrement and branch
 
@@ -424,7 +424,7 @@ GBall_Base:	; Routine 2
 		bne.s	.checkAnchor				; if not, branch
 		addq.b	#2,obRoutine(a0)			; set routine index to GBall_Base2
 
-; loc_17BFA:
+; loc_B446:
 .checkAnchor:
 		cmpi.w	#32,GBall_AnchorPos(a0)			; has the base object (chain anchor) dropped below the ship?
 		beq.s	GBall_Display				; if yes, branch
@@ -448,7 +448,7 @@ GBall_Base2:	; Routine 4
 ; Subroutine to animate, update position, and destroy base on defeat
 ; ---------------------------------------------------------------------------
 
-; sub_17C2A:
+; sub_B46E:
 GBall_UpdateBase:
 		movea.l	BGHZ_ParentObj(a0),a1			; get address of OST of parent
 
@@ -469,7 +469,7 @@ GBall_UpdateBase:
 
 ; ===========================================================================
 
-; loc_17C68:
+; loc_B49E:
 GBall_Link:	; Routine 6
 		movea.l	BGHZ_ParentObj(a0),a1			; copy parent object address
 		tst.b	obStatus(a1)				; has Eggman's defeated flag been set (bit 7)?

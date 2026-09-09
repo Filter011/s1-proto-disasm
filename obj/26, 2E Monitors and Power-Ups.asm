@@ -92,7 +92,7 @@ Mon_Solid:	; Routine 2
 		cmpi.b	#id_Roll,obAnim(a1)			; is Sonic rolling?
 		beq.s	.checkpush				; if yes, branch
 
-; loc_A20A:
+; loc_8138:
 .dontbreak:
 		tst.w	d1					; has Sonic touched the monitor from the sides?
 		bpl.s	.sidetouch				; if yes, branch
@@ -102,7 +102,7 @@ Mon_Solid:	; Routine 2
 		bra.w	Mon_Animate				; process monitor normally
 ; ===========================================================================
 
-; loc_A220:
+; loc_814E:
 .sidetouch:
 		tst.w	d0					; check Sonic's horizontal distance to the monitor
 		beq.w	.push					; if exactly the same, branch
@@ -114,18 +114,18 @@ Mon_Solid:	; Routine 2
 		bra.s	.stopsonic				; otherwise, keep Sonic in place
 ; ===========================================================================
 
-; loc_A230:
+; loc_815E:
 .sonicleft:
 		tst.w	obVelX(a1)				; is Sonic moving to the right or still?
 		bpl.s	.push					; if yes, branch
 
-; loc_A236:
+; loc_8164:
 .stopsonic:
 		sub.w	d0,obX(a1)				; horizontally align Sonic to monitor
 		move.w	#0,obInertia(a1)			; stop Sonic moving
 		move.w	#0,obVelX(a1)				; ''
 
-; loc_A246:
+; loc_8174:
 .push:
 		btst	#1,obStatus(a1)				; is Sonic airborne?
 		bne.s	.stoppushing				; if yes, branch
@@ -134,7 +134,7 @@ Mon_Solid:	; Routine 2
 		bra.s	Mon_Animate				; process monitor normally
 ; ===========================================================================
 
-; loc_A25C:
+; loc_818A:
 .checkpush:
 		btst	#5,obStatus(a0)				; is Sonic still pushing against the monitor?
 		beq.s	Mon_Animate				; if not, branch
@@ -143,7 +143,7 @@ Mon_Solid:	; Routine 2
 		move.w	#id_Run,obAnim(a1)			; clear obAnim and set obNextAni to 1
 	endif
 
-; loc_A26A:
+; loc_8198:
 .stoppushing:
 		bclr	#5,obStatus(a0)				; clear pushing flag for monitor
 		bclr	#5,obStatus(a1)				; clear pushing flag for Sonic
@@ -421,24 +421,24 @@ Mon_SolidSides:
 		add.w	d1,d1					; double collision width
 		sub.w	d1,d0					; update d0 for to right side of monitor
 
-	; loc_A4DC:
+	; loc_83F6:
 	.left_hit:
 		cmpi.w	#$10,d3					; is Sonic between top & middle of monitor?
 		blo.s	.top_hit				; if yes, branch
 
-; loc_A4E2:
+; loc_83FC:
 .side_hit:
 		moveq	#1,d1					; set side collision flag
 		rts						; return with result in CCR
 ; ===========================================================================
 
-; loc_A4E6:
+; loc_8400:
 .no_collision:
 		moveq	#0,d1					; set no collision flag
 		rts						; return with result in CCR
 ; ===========================================================================
 
-; loc_A4EA:
+; loc_8404:
 .top_hit:
 		moveq	#0,d1
 		move.b	obActWid(a0),d1				; get display width of monitor

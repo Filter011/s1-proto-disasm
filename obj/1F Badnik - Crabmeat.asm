@@ -129,7 +129,7 @@ Crab_Action_Scuttle:
 		btst	#0,obStatus(a0)				; is Crabmeat currently facing to the left?
 		beq.s	.checkLedge				; if not, branch
 		subi.w	#16*2,d3				; look 16px ahead to the left instead
-	; loc_9640:
+	; loc_76FA:
 	.checkLedge:
 		jsr	(ObjFloorDist2).l			; get floor distance 16px ahead (left or right)
 		cmpi.w	#-8,d1					; is there a steep upward slope ahead?
@@ -139,7 +139,7 @@ Crab_Action_Scuttle:
 		rts
 ; ---------------------------------------------------------------------------
 
-; loc_9654:
+; loc_770E:
 .alignAndAnimate:
 		jsr	(ObjFloorDist).l			; calculate distance and angle to floor
 		add.w	d1,obY(a0)				; align Crabmeat to floor
@@ -150,7 +150,7 @@ Crab_Action_Scuttle:
 		rts
 ; ---------------------------------------------------------------------------
 
-; loc_966E:
+; loc_7728:
 .initFire:
 		subq.b	#2,ob2ndRout(a0)			; go back to Crab_Action_WaitFire
 		move.w	#60-1,crab_timedelay(a0)		; set pre-firing delay to 1 second
@@ -184,7 +184,7 @@ Crab_SetAni_Descending:
 		rts						; return with animation ID in d0
 ; ---------------------------------------------------------------------------
 
-; loc_96A4:
+; loc_775E:
 Crab_SetAni_Ascending:
 		cmpi.b	#-6,d3					; is floor angle steep enough?
 		bhi.s	.return					; if not, keep using flat animation

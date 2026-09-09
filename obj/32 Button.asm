@@ -89,12 +89,12 @@ But_Pressed:	; Routine 2
 		move.w	#sfx_Switch,d0				; set switch sound
 		jsr	(QueueSound2).l				; play it
 
-	; loc_BDD6:
+	; loc_9E0C:
 	.setPressedState:
 		bset	#0,obFrame(a0)				; use "pressed" frame
 		bset	d3,(a3)					; set stored button pressed state
 
-	; loc_BDDE:
+	; loc_9E14:
 	.handleFlashing:
 		; This makes the switch flash between red and gray if bit 5 in subtype is set.
 		; It goes completely unused in the entire game and is partially broken in some zones.
@@ -147,7 +147,7 @@ But_MZBlock:
 		bpl.s	.nextObject				; if not, branch
 		cmpi.b	#id_PushBlock,obID(a1)			; is object a pushable green MZ block?
 		beq.s	.blockFound				; if yes, branch
-	; loc_BE4E:
+	; loc_9E82:
 	.nextObject:
 		lea	object_size(a1),a1			; check next object
 		dbf	d6,.findBlock				; repeat $5F times
@@ -161,7 +161,7 @@ But_MZBlock:
 .mzBlock_sizes:	dc.b $10, $10	; x/y radius
 ; ===========================================================================
 
-; loc_BE5E:
+; loc_9E90:
 .blockFound:
 		moveq	#1,d0					; unnecessary specifications...
 		andi.w	#$3F,d0					; ...that always end up with the same values of 2...
@@ -180,13 +180,13 @@ But_MZBlock:
 		blo.s	.checkY					; if block is in horizontal range of button, branch to check Y next
 		bra.s	.nextObject				; block is not in horizontal range of button
 
-	; loc_BE80:
+	; loc_9EB2:
 	.checkX_fromRight:
 		cmp.w	d4,d0					; is block horizontally in range?
 		bhi.s	.nextObject				; if not, branch
 ; ---------------------------------------------------------------------------
 
-; loc_BE84:
+; loc_9EB6:
 .checkY:
 		move.b	(a2)+,d1				; load Y-radius
 		ext.w	d1					; extend to word
@@ -199,13 +199,13 @@ But_MZBlock:
 		blo.s	.blockOnTop				; is block vertically in range? if yes, branch
 		bra.s	.nextObject				; block is not in vertical range of button
 
-	; loc_BE9A:
+	; loc_9ECC:
 	.checkY_fromAbove:
 		cmp.w	d5,d0					; is block vertically in range?
 		bhi.s	.nextObject				; if not, branch
 ; ---------------------------------------------------------------------------
 
-; loc_BE9E:
+; loc_9ED0:
 .blockOnTop:
 		moveq	#1,d0					; set pushable block on top
 		rts

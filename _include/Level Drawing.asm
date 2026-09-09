@@ -72,7 +72,7 @@ LoadTilesAsYouMove:
 
 	; --- FG Bottom ---
 
-; loc_6908:
+; loc_4438:
 .checkDown:
 		bclr	#1,(a2)					; clear down draw flag
 		beq.s	.checkLeft				; if it wasn't set, branch
@@ -87,7 +87,7 @@ LoadTilesAsYouMove:
 
 	; --- FG Left ---
 
-; loc_6922:
+; loc_4452:
 .checkLeft:
 		bclr	#2,(a2)					; clear left draw flag
 		beq.s	.checkRight				; if it wasn't set, branch
@@ -102,7 +102,7 @@ LoadTilesAsYouMove:
 
 	; --- FG Right ---
 
-; loc_6938:
+; loc_4468:
 .checkRight:
 		bclr	#3,(a2)					; clear right draw flag
 		beq.s	.return					; if it wasn't set, branch
@@ -115,7 +115,7 @@ LoadTilesAsYouMove:
 		move.w	#320,d5					; ''
 		bsr.w	DrawBlocks_TB				; draw a vertical line of blocks to the right of the screen
 
-; locret_6952:
+; locret_4482:
 .return:
 		rts
 ; End of function LoadTilesAsYouMove
@@ -126,7 +126,7 @@ LoadTilesAsYouMove:
 ; Subroutine to draw BG block strips - Top scroll section (scroll block A)
 ; ---------------------------------------------------------------------------
 
-; sub_6954: DrawBGScrollBlock1:
+; sub_4484: DrawBGScrollBlock1:
 DrawBG_Top:
 		tst.b	(a2)					; have any of the BG top section draw flags been set?
 		beq.w	.return					; if not, branch (no drawing is required)
@@ -147,7 +147,7 @@ DrawBG_Top:
 
 	; --- BG Bottom ---
 
-; loc_6972:
+; loc_44A2:
 .checkDown:
 		bclr	#1,(a2)					; clear down draw flag
 		beq.s	.checkLeft				; if it wasn't set, branch
@@ -163,7 +163,7 @@ DrawBG_Top:
 
 	; --- BG Left (Top Section) ---
 
-; loc_698E:
+; loc_44BE:
 .checkLeft:
 		bclr	#2,(a2)					; clear left draw flag
 		beq.s	.checkRight				; if it wasn't set, branch
@@ -184,13 +184,13 @@ DrawBG_Top:
 		blo.s	.drawLeft				; if not, branch
 		moveq	#((224+16+16)/16)-1,d6			; set to maximum plane size
 
-	; loc_69BA:
+	; loc_44EA:
 	.drawLeft:
 		bsr.w	DrawBlocks_TB_2				; draw a vertical line of blocks to the left of the screen
 
 	; --- BG Right (Top Section) ---
 
-; loc_69BE:
+; loc_44EE:
 .checkRight:
 		bclr	#3,(a2)					; clear right draw flag
 		beq.s	.return					; if it wasn't set, branch
@@ -211,11 +211,11 @@ DrawBG_Top:
 		blo.s	.drawRight				; if not, branch
 		moveq	#((224+16+16)/16)-1,d6			; set to maximum plane size
 
-	; loc_69EE:
+	; loc_451E:
 	.drawRight:
 		bsr.w	DrawBlocks_TB_2				; draw a vertical line of blocks to the right of the screen
 
-; locret_69F2:
+; locret_4522:
 .return:
 		rts
 ; End of function DrawBG_Top
@@ -226,7 +226,7 @@ DrawBG_Top:
 ; Subroutine to draw BG block strips - Bottom scroll section (below scroll block A)
 ; ---------------------------------------------------------------------------
 
-; sub_69F4: DrawBGScrollBlock2:
+; sub_4524: DrawBGScrollBlock2:
 DrawBG_Bottom:
 		tst.b	(a2)					; have any of the BG bottom section draw flags been set?
 		beq.w	.return					; if not, branch (no drawing is required)
@@ -261,7 +261,7 @@ DrawBG_Bottom:
 
 	; --- BG Right (Bottom Section) ---
 
-; loc_6A3E:
+; loc_456E:
 .checkRight:
 		bclr	#3,(a2)					; clear right draw flag
 		beq.s	.return					; if it wasn't set, branch
@@ -287,7 +287,7 @@ DrawBG_Bottom:
 		neg.w	d6					; reverse size to get the remaining bottom section size
 		bsr.w	DrawBlocks_TB_2				; draw a vertical line of blocks to the right of the screen
 
-; locret_6A80:
+; locret_45B0:
 .return:
 		rts
 ; End of function DrawBG_Bottom
@@ -326,7 +326,7 @@ DrawBG_Unused_PlaneZ:
 
 	; --- Right ---
 
-; loc_6AAC:
+; loc_45DC:
 .checkRight:
 		bclr	#3,(a2)					; clear right draw flag
 		beq.s	.return					; if it wasn't set, branch
@@ -344,7 +344,7 @@ DrawBG_Unused_PlaneZ:
 		moveq	#3-1,d6					; set number of blocks to draw (3 blocks)
 		bsr.w	DrawBlocks_TB_2				; draw a vertical line of blocks to the right of the screen
 
-; locret_6AD6:
+; locret_4606:
 .return:
 		rts
 ; End of function DrawBG_Unused_PlaneZ
@@ -679,7 +679,7 @@ Calc_VRAM_Pos:
 ; this code to draw player 2's foreground in multiplayer.
 ; ---------------------------------------------------------------------------
 
-; sub_6C3C: Calc_VRAM_Pos_Unknown: CalcPlane8000:
+; sub_476E: Calc_VRAM_Pos_Unknown: CalcPlane8000:
 Calc_VRAM_Pos_PlaneZ:
 		add.w	4(a3),d4				; add Screen Y position
 		add.w	(a3),d5					; add Screen X position

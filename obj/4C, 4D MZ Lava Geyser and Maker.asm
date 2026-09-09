@@ -286,7 +286,7 @@ Geyser_Type01:
 		rts
 ; ===========================================================================
 
-; loc_EFFC: Geyser_Middle:
+; loc_CB8C: Geyser_Middle:
 Geyser_BigLavaWall: ; Routine 4
 		movea.l	gmake_parent(a0),a1			; get bubbling top tip object
 		cmpi.b	#6,obRoutine(a1)			; has it marked itself for deletion?

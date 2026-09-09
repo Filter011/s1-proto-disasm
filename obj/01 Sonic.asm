@@ -263,7 +263,7 @@ Sonic_Move:
 		btst	#3,obStatus(a0)				; is Sonic standing on a platform object?
 		beq.s	.chkbalance				; if not, branch
 
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	standonobject(a0),d0			; get OST index of object Sonic is currently standing on
 		lsl.w	#object_size_bits,d0			; multiply by $40 (object_size)
 		lea	(v_objspace).w,a1			; load object space
@@ -271,7 +271,7 @@ Sonic_Move:
 		tst.b	obStatus(a1)				; was the object an enemy/boss that was destroyed? (see React_Enemy)
 		bmi.s	Sonic_LookUp				; if yes, skip over balance check
 
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	obActWid(a1),d1				; get physical width of stood-on object
 		move.w	d1,d2					; copy width
 		add.w	d2,d2					; double it
@@ -293,22 +293,22 @@ Sonic_Move:
 		cmpi.b	#3,angleright(a0)			; is Sonic at the right edge of the floor?
 		bne.s	.chkleftedge				; if not, check for the left edge
 
-; loc_12F5A:
+; loc_EA82:
 .rightbalance:
 		bclr	#0,obStatus(a0)				; clear X-flip flag (make Sonic face right)
 		bra.s	.balance				; do balance animation
 ; ===========================================================================
 
-; loc_12F62:
+; loc_EA8A:
 .chkleftedge:
 		cmpi.b	#3,angleleft(a0)			; is Sonic at the left edge of the floor?
 		bne.s	Sonic_LookUp				; if not, branch (no balancing)
 
-; loc_12F6A:
+; loc_EA92:
 .leftbalance:
 		bset	#0,obStatus(a0)				; set X-flip flag (make Sonic face left)
 
-; loc_12F70:
+; loc_EA98:
 .balance:
 		move.b	#id_Balance,obAnim(a0)			; use "balancing" animation
 		bra.s	Sonic_ResetScr				; prevent looking up/down
@@ -342,12 +342,12 @@ Sonic_ResetScr:
 		bcc.s	.resetdown				; does camera need to go back down? if yes, branch
 		addq.w	#4,(v_lookshift).w			; move camera back up (becomes 2 with the next line)
 
-; loc_12FBE:
+; loc_EAE6:
 .resetdown:
 		subq.w	#2,(v_lookshift).w			; move camera back down
 ; ---------------------------------------------------------------------------
 
-; loc_12FC2:
+; loc_EAEA:
 Sonic_CheckDpadLetGo:
 		move.b	(v_jpadhold2).w,d0			; get held buttons
 		andi.b	#btnL+btnR,d0				; is left or right held?
@@ -359,24 +359,24 @@ Sonic_CheckDpadLetGo:
 		bcc.s	.stillright				; if result is still to the right, branch
 		move.w	#0,d0					; reset speed to zero on sign change
 
-; loc_12FDC:
+; loc_EB04:
 .stillright:
 		move.w	d0,obInertia(a0)			; set Sonic's new ground speed
 		bra.s	Sonic_AngleSpeed			; skip over
 ; ===========================================================================
 
-; loc_12FE2:
+; loc_EB0A:
 .movingleftward:
 		add.w	d5,d0					; reduce current leftward speed by acceleration
 		bcc.s	.stillleft				; if result is still to the left, branch
 		move.w	#0,d0					; reset speed to zero on sign change
 
-; loc_12FEA:
+; loc_EB12:
 .stillleft:
 		move.w	d0,obInertia(a0)			; set Sonic's new ground speed
 ; ---------------------------------------------------------------------------
 
-; loc_12FEE:
+; loc_EB16:
 Sonic_AngleSpeed:
 		move.b	obAngle(a0),d0				; get Sonic's current angle in relation to the floor
 		jsr	(CalcSine).l				; get sine and cosine values based on angle
@@ -388,7 +388,7 @@ Sonic_AngleSpeed:
 		move.w	d0,obVelY(a0)				; set new Y-velocity
 ; ---------------------------------------------------------------------------
 
-; loc_1300C:
+; loc_EB34:
 Sonic_WallSpeedAdjust:
 		move.b	#$40,d1					; get angle rotation for wall collision detection
 		tst.w	obInertia(a0)				; is Sonic standing still?
@@ -396,7 +396,7 @@ Sonic_WallSpeedAdjust:
 		bmi.s	.negspeed				; is he moving to the left? if yes, branch
 		neg.w	d1					; invert angle rotation when moving right
 
-; loc_13024:
+; loc_EB42:
 .negspeed:
 		move.b	obAngle(a0),d0				; get Sonic's current angle
 		add.b	d1,d0					; rotate it by 90 degrees depending on directional speed
@@ -421,23 +421,23 @@ Sonic_WallSpeedAdjust:
 		rts
 ; ===========================================================================
 
-; loc_13060:
+; loc_EB7E:
 .hitup:		; d0 is $80, Sonic is facing up
 		sub.w	d1,obVelY(a0)				; adjust Y-velocity to prevent Sonic from walking into the ceiling
 		rts
 ; ===========================================================================
 
-; loc_13066:
+; loc_EB84:
 .hitleft:	; d0 is $40, Sonic is facing left
 		sub.w	d1,obVelX(a0)				; adjust X-velocity to prevent Sonic from walking into the wall
 		rts
 ; ===========================================================================
 
-; loc_13078:
+; loc_EB8A:
 .hitdown:	; d0 is $00, Sonic is facing down
 		add.w	d1,obVelY(a0)				; adjust Y-velocity to prevent Sonic from walking into the floor
 
-; locret_1307C:
+; locret_EB8E:
 .return:
 		rts
 ; End of function Sonic_Move
@@ -452,14 +452,14 @@ Sonic_MoveLeft:
 		beq.s	.still					; is Sonic standing still? if yes, branch
 		bpl.s	.changeddirection			; has Sonic changed direction? if yes, branch
 
-; loc_13086:
+; loc_EB98:
 .still:
 		bset	#0,obStatus(a0)				; set X-flip flag (Sonic is facing left)
 		bne.s	.alreadyleft				; if he already was facing left, branch
 		bclr	#5,obStatus(a0)				; clear pushing flag
 		move.b	#id_Run,obPrevAni(a0)			; restart Sonic's animation
 
-; loc_1309A:
+; loc_EBAC:
 .alreadyleft:
 		sub.w	d5,d0					; subtract acceleration to current ground speed
 		move.w	d6,d1					; get current top speed
@@ -468,20 +468,20 @@ Sonic_MoveLeft:
 		bgt.s	.nocap					; if not, branch
 		move.w	d1,d0					; cap Sonic's ground speed
 
-; loc_130A6:
+; loc_EBB8:
 .nocap:
 		move.w	d0,obInertia(a0)			; set new ground speed
 		move.b	#id_Walk,obAnim(a0)			; use walking animation
 		rts
 ; ===========================================================================
 
-; loc_130B2:
+; loc_EBC4:
 .changeddirection:
 		sub.w	d4,d0					; apply deceleration to current speed
 		bcc.s	.stilldecel       			; if still decelerating, branch
 		move.w	#-$80,d0        			; set minimum speed on sign change
 
-; loc_130BA:
+; loc_EBCC:
 .stilldecel:
 		move.w	d0,obInertia(a0)			; set new ground speed
 	if FixBugs
@@ -507,7 +507,7 @@ Sonic_MoveLeft:
 		move.w	#sfx_Skid,d0				; set skidding sound
 		jsr	(QueueSound2).l				; play it
 
-; locret_130E8:
+; locret_EBFA:
 .nostopping:
 		rts
 ; End of function Sonic_MoveLeft
@@ -525,27 +525,27 @@ Sonic_MoveRight:
 		bclr	#5,obStatus(a0)				; clear pushing flag
 		move.b	#id_Run,obPrevAni(a0)			; restart Sonic's animation
 
-; loc_13104:
+; loc_EC16:
 .alreadyright:
 		add.w	d5,d0					; add acceleration to current ground speed
 		cmp.w	d6,d0					; is new speed above max speed?
 		blt.s	.nocap					; if not, branch
 		move.w	d6,d0					; cap Sonic's ground speed
 
-; loc_1310C:
+; loc_EC1E:
 .nocap:
 		move.w	d0,obInertia(a0)			; set new ground speed
 		move.b	#id_Walk,obAnim(a0)			; use walking animation
 		rts
 ; ===========================================================================
 
-; loc_13118:
+; loc_EC2A:
 .changedirection:
 		add.w	d4,d0					; apply deceleration to current speed
 		bcc.s	.stilldecel				; if still decelerating, branch
 		move.w	#$80,d0					; set minimum speed on sign change
 
-; loc_13120:
+; loc_EC32:
 .stilldecel:
 		move.w	d0,obInertia(a0)			; set new ground speed
 	if FixBugs
@@ -567,7 +567,7 @@ Sonic_MoveRight:
 		move.w	#sfx_Skid,d0				; set skidding sound
 		jsr	(QueueSound2).l				; play it
 
-; locret_1314E:
+; locret_EC60:
 .nostopping:
 		rts
 ; End of function Sonic_MoveRight
@@ -592,14 +592,14 @@ Sonic_RollSpeed:
 		beq.s	.notleft				; if not, branch
 		bsr.w	Sonic_RollLeft				; apply leftside movement updates for rolling
 
-; loc_1317C:
+; loc_EC86:
 .notleft:
 		btst	#bitR,(v_jpadhold2).w			; is right being held?
 		beq.s	.notright				; if not, branch
 		bsr.w	Sonic_RollRight				; apply rightward movement updates for rolling
 ; ---------------------------------------------------------------------------
 
-; loc_13188:
+; loc_EC92:
 .notright:
 		move.w	obInertia(a0),d0			; get Sonic's current ground speed
 		beq.s	Sonic_RollSlowdownDone			; is he standing still? if yes, branch
@@ -608,24 +608,24 @@ Sonic_RollSpeed:
 		bcc.s	.stillrollingright			; if still rolling, branch
 		move.w	#0,d0					; reset speed to zero on sign change
 
-; loc_13198:
+; loc_ECA2:
 .stillrollingright:
 		move.w	d0,obInertia(a0)			; set new ground speed
 		bra.s	Sonic_RollSlowdownDone			; skip over leftward rolling updates
 ; ===========================================================================
 
-; loc_1319E:
+; loc_ECA8:
 .rollingleft:
 		add.w	d5,d0					; slightly decrease Sonic's current roll speed
 		bcc.s	.stillrollingleft			; if still rolling, branch
 		move.w	#0,d0					; reset speed to zero on sign change
 
-; loc_131A6:
+; loc_ECB0:
 .stillrollingleft:
 		move.w	d0,obInertia(a0)			; set new ground speed
 ; ---------------------------------------------------------------------------
 
-; loc_131AA:
+; loc_ECB4:
 Sonic_RollSlowdownDone:
 		tst.w	obInertia(a0)				; is Sonic standing still?
 		bne.s	Sonic_AngledRollSpeed			; if not, branch
@@ -637,7 +637,7 @@ Sonic_RollSlowdownDone:
 		subq.w	#sonic_height-sonic_roll_height,obY(a0)	; adjust Y-position for standing
 ; ---------------------------------------------------------------------------
 
-; loc_131CC:
+; loc_ECD6:
 Sonic_AngledRollSpeed:
 	if FixBugs
 		; Sonic 1 does not reset the camera to its default position when
@@ -662,12 +662,9 @@ Sonic_AngledRollSpeed:
 		cmpi.w	#$1000,d1				; is new X-velocity bigger than maximum screen shift speed? (rightward)
 		ble.s	.noPosIntCapX				; if not, branch
 		move.w	#$1000,d1				; cap roll speed to screen shift speed (rightward)
-; loc_131F0:
-.noPosIntCapX:
-		cmpi.w	#-$1000,d1				; is new X-velocity bigger than maximum screen shift speed? (leftward)
+.noPosIntCapX:	cmpi.w	#-$1000,d1				; is new X-velocity bigger than maximum screen shift speed? (leftward)
 		bge.s	.noNegIntCapX				; if not, branch
 		move.w	#-$1000,d1				; cap roll speed to screen shift speed (leftward)
-; loc_131FA:
 .noNegIntCapX:
 	endif
 		move.w	d1,obVelX(a0)				; set new X-velocity
@@ -700,20 +697,20 @@ Sonic_RollLeft:
 		beq.s	.still					; is Sonic standing still? if yes, branch
 		bpl.s	.changeddirection			; has Sonic changed direction? if yes, branch
 
-; loc_1320A:
+; loc_ED00:
 .still:
 		bset	#0,obStatus(a0)				; set X-flip flag (Sonic is facing left)
 		move.b	#id_Roll,obAnim(a0)			; use "rolling" animation
 		rts
 ; ===========================================================================
 
-; loc_13218:
+; loc_ED0E:
 .changeddirection:
 		sub.w	d4,d0					; apply deceleration to current speed
 		bcc.s	.stilldecel				; if still decelerating, branch
 		move.w	#-$80,d0				; set minimum speed on sign change
 
-; loc_13220:
+; loc_ED16:
 .stilldecel:
 		move.w	d0,obInertia(a0)			; set new ground speed
 		rts
@@ -732,13 +729,13 @@ Sonic_RollRight:
 		rts
 ; ===========================================================================
 
-; loc_1323A:
+; loc_ED30:
 .changedirection:
 		add.w	d4,d0					; apply deceleration to current speed
 		bcc.s	.stilldecel				; if still decelerating, branch
 		move.w	#$80,d0					; set minimum speed on sign change
 
-; loc_13242:
+; loc_ED38:
 .stilldecel:
 		move.w	d0,obInertia(a0)			; set new ground speed
 		rts
@@ -770,7 +767,7 @@ Sonic_JumpDirection:
 		bgt.s	.notleft				; if not, branch
 		move.w	d1,d0					; cap leftward X-speed to maximum
 
-; loc_13278:
+; loc_ED6E:
 .notleft:
 		btst	#bitR,(v_jpadhold1).w			; is right being held?
 		beq.s	Sonic_JumpMove				; if not, branch
@@ -792,12 +789,12 @@ Sonic_RollJumpLock:
 		bcc.s	.resetdown				; does camera need to go back down? if yes, branch
 		addq.w	#4,(v_lookshift).w			; move camera back up (becomes 2 with the next line)
 
-; loc_132A0:
+; loc_ED96:
 .resetdown:
 		subq.w	#2,(v_lookshift).w			; move camera back down
 ; ---------------------------------------------------------------------------
 
-; loc_132A4:
+; loc_ED9A:
 Sonic_AirDrag:
 		cmpi.w	#-$400,obVelY(a0)			; is Sonic moving faster than -$400 upwards?
 		blo.s	.return					; if yes, branch (skip air drag)
@@ -811,23 +808,23 @@ Sonic_AirDrag:
 		bcc.s	.stillright				; if result is still rightward, branch
 		move.w	#0,d0					; reset speed on sign change
 
-; loc_132C0:
+; loc_EDB6:
 .stillright:
 		move.w	d0,obVelX(a0)				; set new X-speed
 		rts
 ; ===========================================================================
 
-; loc_132C6:
+; loc_EDBC:
 .jumpingleftward:
 		sub.w	d1,d0					; slightly reduce speed (air drag)
 		bcs.s	.stillleft				; if result is still leftward, branch
 		move.w	#0,d0					; reset speed on sign change
 
-; loc_132CE:
+; loc_EDC4:
 .stillleft:
 		move.w	d0,obVelX(a0)				; set new X-speed
 
-; locret_132D2:
+; locret_EDC8:
 .return:
 		rts
 ; End of function Sonic_JumpDirection
@@ -856,7 +853,7 @@ Sonic_SquashUnused:
 		move.w	#0,obVelY(a0)				; clear Sonic's vertical speed
 		move.b	#id_Warp3,obAnim(a0)			; use "warping" animation
 
-; locret_13302:
+; locret_EDF8:
 .return:
 		rts
 ; End of function Sonic_SquashUnused
@@ -886,7 +883,7 @@ Sonic_LevelBound:
 		cmp.w	d1,d0					; has Sonic touched the right level boundary?
 		bls.s	.sides					; if yes, branch
 
-; loc_13336:
+; loc_EE22:
 .chkbottom:
 		move.w	(v_limitbtm2).w,d0			; load current target bottom level boundary
 	if FixBugs
@@ -905,7 +902,7 @@ Sonic_LevelBound:
 		rts
 ; ===========================================================================
 
-; Boundary_Sides
+; Boundary_Sides:
 .sides:
 		move.w	d0,obX(a0)				; prevent Sonic from leaving the side boundary
 		move.w	#0,obSubpixelX(a0)			; clear subpixel portion
@@ -924,7 +921,7 @@ Sonic_Roll:
 		move.w	obInertia(a0),d0			; get Sonic's current ground speed
 		bpl.s	.ispositive				; is it positive? if yes, branch
 		neg.w	d0					; otherwise, make it positive
-; loc_13392:
+; loc_EE54:
 .ispositive:
 		cmpi.w	#$80,d0					; is Sonic moving at $80 speed or faster?
 		blo.s	.noroll					; if not, branch
@@ -966,7 +963,7 @@ Sonic_ChkRoll:
 		bne.s	.ismoving				; if not, branch
 		move.w	#$200,obInertia(a0)			; force forward movement (this is used for the S-tunnels in GHZ to not get stuck)
 
-; locret_133E8:
+; locret_EEAA:
 .ismoving:
 		rts
 ; End of function Sonic_Roll
@@ -1082,16 +1079,16 @@ Sonic_SlopeResistWalk:
 		beq.s	.noresist				; if yes, branch
 		add.w	d0,obInertia(a0)			; add resist force to Sonic's speed while walking up a right slope
 
-; locret_13502:
+; locret_EFB6:
 .noresist:
 		rts
 ; ===========================================================================
 
-; loc_13504:
+; loc_EFB8:
 .left:
 		add.w	d0,obInertia(a0)			; add resist force to Sonic's speed while walking up a left slope
 
-; locret_13508:
+; locret_EFBC:
 .return:
 		rts
 ; End of function Sonic_SlopeResist
@@ -1118,23 +1115,23 @@ Sonic_SlopeResistRoll:
 		bpl.s	.resistright				; if yes, branch (descending from slope rolls faster)
 		asr.l	#2,d0					; reduce resist force while ascending a slope
 
-; loc_13534:
+; loc_EFE8:
 .resistright:
 		add.w	d0,obInertia(a0)			; add resist force to Sonic's speed while rolling up a right slope
 		rts
 ; ===========================================================================
 
-; loc_1353A:
+; loc_EFEE:
 .left:
 		tst.w	d0					; is resist force negative?
 		bmi.s	.resistleft				; if yes, branch (descending from slope rolls faster)
 		asr.l	#2,d0					; reduce resist force while ascending a slope
 
-; loc_13540:
+; loc_EFF4:
 .resistleft:
 		add.w	d0,obInertia(a0)			; add resist force to Sonic's speed while walking up a left slope
 
-; locret_13544:
+; locret_EFF8:
 .return:
 		rts
 ; End of function Sonic_RollRepel
@@ -1159,19 +1156,19 @@ Sonic_SlopeRepel:
 		bpl.s	.posinertia				; is it positive? if yes, branch
 		neg.w	d0					; otherwise, make it positive
 
-; loc_1356A:
+; loc_F018:
 .posinertia:
 		cmpi.w	#$280,d0				; is Sonic's ground speed high enough?
 		bhs.s	.return					; if yes, branch
 		bset	#1,obStatus(a0)				; set in-air flag to detach Sonic from wall
 		move.w	#30,locktime(a0)			; disable left/right input for half a second
 
-; locret_13580:
+; locret_F02A:
 .return:
 		rts
 ; ===========================================================================
 
-; loc_13582:
+; loc_F02C:
 .decrementlocktime:
 		subq.w	#1,locktime(a0)				; decrement left/right disable timer
 		rts
@@ -1191,22 +1188,22 @@ Sonic_JumpAngle:
 		bcc.s	.dontclear				; if the angle's still below 0, don't clear the angle
 		moveq	#0,d0					; set angle to d0
 
-; loc_13596:
+; loc_F040:
 .dontclear:
 		bra.s	.applyangle				; skip over to update angle
 ; ===========================================================================
 
-; loc_13598:
+; loc_F042:
 .decrease:
 		subq.b	#2,d0					; decrease angle
 		bcc.s	.applyangle				; if the angle's still above 0, don't clear the angle
 		moveq	#0,d0					; set angle to 0
 
-; loc_1359E:
+; loc_F048:
 .applyangle:
 		move.b	d0,obAngle(a0)				; set new angle value
 
-; locret_135A2:
+; locret_F04C:
 .return:
 		rts
 ; End of function Sonic_JumpAngle
@@ -1278,21 +1275,21 @@ Sonic_FloorDown:
 		rts
 ; ===========================================================================
 
-; loc_1365C:
+; loc_F0E0:
 .steepslope:
 		move.w	#0,obVelX(a0)				; completely clear Sonic's horizontal speed when landing on a steep slope
 		cmpi.w	#$FC0,obVelY(a0)			; is Sonic's fall speed almost at the maximum screen shift speed?
 		ble.s	.noslopecap				; if not, branch
 		move.w	#$FC0,obVelY(a0)			; otherwise, cap it to not exceed maximum screen shift speed
 
-; loc_13670:
+; loc_F0F4:
 .noslopecap:
 		move.w	obVelY(a0),obInertia(a0)		; convert in-air vertical speed to ground speed when landing
 		tst.b	d3					; is slope (when viewed left-to-right in game) ascending?
 		bpl.s	.return					; if not, branch
 		neg.w	obInertia(a0)				; negate converted ground speed for ascending slopes
 
-; locret_1367E:
+; locret_F102:
 .return:
 		rts
 ; End of function Sonic_FloorDown
@@ -1302,7 +1299,7 @@ Sonic_FloorDown:
 ; When Sonic is in-air with his main momentum being to the left
 ; ---------------------------------------------------------------------------
 
-; loc_13680:
+; loc_F104:
 Sonic_FloorLeft:
 		bsr.w	Sonic_FindWallLeft_Quick_UsePos		; check Sonic's distance to nearest left wall
 		tst.w	d1					; is Sonic grazing a wall to the left while falling?
@@ -1820,7 +1817,7 @@ Sonic_Loops:
 
 Sonic_Animate:
 		lea	(Ani_Sonic).l,a1			; load Sonic's animation scripts
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obAnim(a0),d0				; get Sonic's currently set animation ID
 		cmp.b	obPrevAni(a0),d0			; does it differ from the previous animation? (i.e. has animation changed?)
 		beq.s	.do					; if not, branch
@@ -1850,7 +1847,7 @@ Sonic_Animate:
 
 ; SAnim_Do2:
 .loadframe:
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	obAniFrame(a0),d1			; load current frame number
 		move.b	1(a1,d1.w),d0				; read sprite number from script
 		bmi.s	.end_FF					; if animation is complete, branch
@@ -2038,7 +2035,7 @@ Sonic_LoadGfx:
 		lea	(SonicDynPLC).l,a2			; load PLC script
 		add.w	d0,d0					; double current frame for word-based indexing
 		adda.w	(a2,d0.w),a2				; find relevant DPLC definition for new frame
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	(a2)+,d1				; read "number of entries" value
 		subq.b	#1,d1					; subtract by 1 for first iteration
 		bmi.s	.nochange				; if this was an empty entry, nothing to do, branch
@@ -2048,7 +2045,7 @@ Sonic_LoadGfx:
 
 ; SPLC_ReadEntry:
 .readentry:
-		moveq	#0,d2					; clear d2
+		moveq	#0,d2
 		move.b	(a2)+,d2				; read next byte of DPLC entry
 		move.w	d2,d0					; copy to d0
 		lsr.b	#4,d0					; shift out lower nybble, upper nybble is number of tiles

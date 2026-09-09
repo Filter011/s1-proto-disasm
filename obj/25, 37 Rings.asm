@@ -71,7 +71,7 @@ Ring_Main:	; Routine 0
 		cmpi.w	#7,d1					; is this a group with 8 rings?
 		bne.s	.not8					; if not, branch
 		moveq	#6,d1					; spawn 7 rings instead
-	; loc_9B80:
+	; loc_7C3A:
 	.not8:
 
 		swap	d1					; store count in upper word (spawner will alternate between both words in d1)
@@ -101,7 +101,7 @@ Ring_MakeRings:
 		bsr.w	FindFreeObj				; find a free RAM slot for the new ring
 		bne.s	Ring_SpawningDone			; if object RAM is full, branch
 
-; loc_9BBA:
+; loc_7C74:
 Ring_SpawnRing:
 		_move.b	#id_Rings,obID(a1)			; load new ring object
 		addq.b	#2,obRoutine(a1)			; set to Ring_Animate
@@ -117,7 +117,7 @@ Ring_SpawnRing:
 		move.b	obRespawnNo(a0),obRespawnNo(a1)		; remember respawn index of ring group
 		move.b	d1,ring_respawnbit(a1)			; remember "ring collected" index bit in respawn data
 
-; loc_9C02:
+; loc_7CBC:
 Ring_NextRing:
 		addq.w	#1,d1					; advance index bit for next ring
 		add.w	d5,d2					; add ring X-spacing value to d2
@@ -125,7 +125,7 @@ Ring_NextRing:
 		swap	d1					; swap to repeat count (dbf is for low word)
 		dbf	d1,Ring_MakeRings			; repeat for number of rings
 
-; loc_9C0E:
+; loc_7CC8:
 Ring_SpawningDone:
 		btst	#0,(a2)					; has first ring already been collected?
 		bne.w	DeleteObject				; if yes, delete it right away

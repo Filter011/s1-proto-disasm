@@ -1,39 +1,42 @@
+; ===========================================================================
 ; ---------------------------------------------------------------------------
-; Subroutine calculate a square root (only available in the prototype and REV00, unused)
-
+; Subroutine calculate a square root (only available in the prototype, REV00, and unused)
+; 
 ; input:
 ;	d0 = number
-
+; 
 ; output:
 ;	d0 = square root of number
 ; ---------------------------------------------------------------------------
 
 CalcSqrt:
-		movem.l	d1-d2,-(sp)
-		move.w	d0,d1
-		swap	d1
-		moveq	#0,d0
-		move.w	d0,d1
-		moveq	#7,d2
+		movem.l	d1-d2,-(sp)				; store register data
+		move.w	d0,d1					; copy input
+		swap	d1					; send to upper word
+		moveq	#0,d0					; clear lower word
+		move.w	d0,d1					; ''
+		moveq	#($10/2)-1,d2				; set elements to count ($10 bits, 2 each time)
 
-loc_22F4:
-		rol.l	#2,d1
-		add.w	d0,d0
-		addq.w	#1,d0
-		sub.w	d0,d1
-		bcc.s	loc_230E
-		add.w	d0,d1
-		subq.w	#1,d0
-		dbf	d2,loc_22F4
-		lsr.w	#1,d0
-		movem.l	(sp)+,d1-d2
-		rts
-; ===========================================================================
+.nextElement:
+		rol.l	#2,d1					; send two bits down
+		add.w	d0,d0					; shift current result left
+		addq.w	#1,d0					; increase by 1
+		sub.w	d0,d1					; subtract from current two bits
+		bhs.s	.incrementRoot				; if current result is not larger than the input so far, branch
+		add.w	d0,d1					; restore back to normal
+		subq.w	#1,d0					; subtract 1 back again
+		dbf	d2,.nextElement				; repeat for all elements
 
-loc_230E:
-		addq.w	#1,d0
-		dbf	d2,loc_22F4
-		lsr.w	#1,d0
-		movem.l	(sp)+,d1-d2
-		rts
+		lsr.w	#1,d0					; keep result in the lower 8 bits
+		movem.l	(sp)+,d1-d2				; restore register data
+		rts						; return
+; ---------------------------------------------------------------------------
+
+.incrementRoot:
+		addq.w	#1,d0					; increase by 1 again
+		dbf	d2,.nextElement				; repeat for all elements
+
+		lsr.w	#1,d0					; keep result in the lower 8 bits
+		movem.l	(sp)+,d1-d2				; restore register data
+		rts						; return
 ; End of function CalcSqrt

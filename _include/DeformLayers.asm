@@ -393,7 +393,7 @@ BGScroll_XY:
 		; Fall-through to BGScroll_YRelative...
 ; ---------------------------------------------------------------------------
 
-; loc_679C:
+; loc_42CC:
 BGScroll_YRelative:
 		move.l	(v_bgscreenposy).w,d3
 		move.l	d3,d0

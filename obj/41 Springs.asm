@@ -68,7 +68,7 @@ Spring_Main:	; Routine 0
 		beq.s	.getPower				; if not, branch
 		bset	#5,obGfx(a0)				; use palette line 2 (yellow)
 
-	; loc_DB72:
+	; loc_BB22:
 	.getPower:
 		andi.w	#$F,d0					; mask out upper nybble
 		move.w	Spring_Powers(pc,d0.w),spring_pow(a0)	; get spring power for subtype
@@ -123,7 +123,7 @@ Spring_LR:	; Routine 8
 		bne.s	.checkPushing				; if not, branch
 		move.b	#8,obRoutine(a0)			; force routine back to Spring_LR
 
-	; loc_DC0C:
+	; loc_BBBC:
 	.checkPushing:
 		btst	#5,obStatus(a0)				; is Sonic pushing against this spring?
 		bne.s	.bounceSideways				; if yes, branch
@@ -149,7 +149,7 @@ Spring_LR:	; Routine 8
 		bne.s	.clearPush				; if yes, don't change animation
 		move.b	#id_Walk,obAnim(a1)			; use walking animation
 
-	; loc_DC56:
+	; loc_BC06:
 	.clearPush:
 		bclr	#5,obStatus(a0)				; clear spring's pushed flag
 		bclr	#5,obStatus(a1)				; clear Sonic's pushing flag
@@ -179,14 +179,14 @@ Spring_Down:	; Routine $E
 		bne.s	.checkTouch				; if not, branch
 		move.b	#$E,obRoutine(a0)			; force routine back to Spring_Down
 
-	; loc_DCA4:
+	; loc_BC54:
 	.checkTouch:
 		tst.b	obSolid(a0)				; is Sonic standing on top of the spring?
 		bne.s	.return					; if yes, don't bounce
 		tst.w	d4					; has Sonic touched the spring from below?
 		bmi.s	.bounceDown				; if yes, branch
 
-	; locret_DCAE:
+	; locret_BC5E:
 	.return:
 		rts
 ; ---------------------------------------------------------------------------

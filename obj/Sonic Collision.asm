@@ -127,7 +127,7 @@ Sonic_FindFloor:
 	endif
 		move.b	#0,d2
 
-; loc_14DD0:
+; loc_105A8:
 Sonic_FindSmaller:
 		move.b	(v_anglebuffer2).w,d3
 		cmp.w	d0,d1					; compare the output distances
@@ -138,13 +138,13 @@ Sonic_FindSmaller:
 		exg.l	d5,d4
 	endif
 
-	; loc_14DDE:
+	; loc_105B6:
 	.no_swap:
 		btst	#0,d3					; is bit 0 of angle set?
 		beq.s	.no_angle_snap				; if not, branch
 		move.b	d2,d3					; clear d3 (this is copied to ost_angle)
 
-	; locret_14DE6:
+	; locret_105BE:
 	.no_angle_snap:
 		rts
 ; End of function Sonic_FindFloor
@@ -169,7 +169,7 @@ Sonic_FindFloor_Quick_UsePos: ; not called from anywhere
 		move.w	obY(a0),d2				; unused
 		move.w	obX(a0),d3				; unused
 
-; loc_14DF0:
+; loc_105C8:
 Sonic_FindFloor_Quick:
 		addi.w	#sonic_quick_size,d2
 		lea	(v_anglebuffer).w,a4			; write angle here
@@ -179,14 +179,14 @@ Sonic_FindFloor_Quick:
 		bsr.w	FindFloor
 		move.b	#0,d2
 
-; loc_14E0A:
+; loc_105E2:
 Sonic_SnapAngle:
 		move.b	(v_anglebuffer).w,d3
 		btst	#0,d3
 		beq.s	.no_angle_snap				; branch if bit 0 of angle is clear
 		move.b	d2,d3					; snap angle to 0, $40, $80 or $C0
 
-	; locret_14E16:
+	; locret_105EE:
 	.no_angle_snap:
 		rts
 ; End of function Sonic_FindFloor_Quick
@@ -206,7 +206,7 @@ Sonic_SnapAngle:
 ;	(a4) = floor angle
 ; ---------------------------------------------------------------------------
 
-; sub_14E50:
+; sub_10628:
 Sonic_FindWallRight:
 		move.w	obY(a0),d2
 		move.w	obX(a0),d3
@@ -266,12 +266,12 @@ Sonic_FindWallRight:
 ;	(a4) = floor angle
 ; ---------------------------------------------------------------------------
 
-; sub_14EB4:
+; sub_1068C:
 Sonic_FindWallRight_Quick_UsePos:
 		move.w	obY(a0),d2
 		move.w	obX(a0),d3
 
-; loc_14EBC:
+; loc_10694:
 Sonic_FindWallRight_Quick:
 		addi.w	#sonic_quick_size,d3
 		lea	(v_anglebuffer).w,a4			; write angle here
@@ -314,7 +314,7 @@ ObjHitWallRight:
 		beq.s	.no_snap
 		move.b	#$C0,d3					; snap to flat right wall
 
-	; locret_14F06:
+	; locret_106DE:
 	.no_snap:
 		rts
 ; End of function ObjHitWallRight
@@ -397,7 +397,7 @@ Sonic_FindCeiling_Quick_UsePos: ; not called from anywhere
 		move.w	obY(a0),d2				; unused
 		move.w	obX(a0),d3				; unused
 
-; loc_14F7C:
+; loc_10754:
 Sonic_FindCeiling_Quick:
 		subi.w	#sonic_quick_size,d2
 		eori.w	#$F,d2
@@ -442,7 +442,7 @@ ObjHitCeiling:
 		beq.s	.no_snap
 		move.b	#$80,d3					; snap to flat ceiling
 
-	; locret_14FD4:
+	; locret_107AC:
 	.no_snap:
 		rts
 ; End of function ObjHitCeiling
@@ -459,7 +459,7 @@ ObjHitCeiling:
 ;	(a4) = floor angle
 ; ---------------------------------------------------------------------------
 
-; loc_14FD6:
+; loc_107AE:
 Sonic_FindWallLeft:
 		move.w	obY(a0),d2
 		move.w	obX(a0),d3
@@ -526,7 +526,7 @@ Sonic_FindWallLeft_Quick_UsePos:
 		move.w	obY(a0),d2
 		move.w	obX(a0),d3
 
-; loc_1504A:
+; loc_10822:
 Sonic_FindWallLeft_Quick:
 		subi.w	#sonic_quick_size,d3
 		eori.w	#$F,d3
@@ -576,7 +576,7 @@ ObjHitWallLeft:
 		beq.s	.no_snap
 		move.b	#$40,d3					; snap to flat left wall
 
-	; locret_15098:
+	; locret_10870:
 	.no_snap:
 		rts
 ; End of function ObjHitWallLeft

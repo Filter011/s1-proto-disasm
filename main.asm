@@ -430,7 +430,7 @@ ErrorExcept:	move.b	#0,(v_errortype).w			; set error code (generic fallback erro
 		bra.s	ErrorHandler_WithoutAddress		; continue to handler
 ; ===========================================================================
 
-; loc_43A:
+; loc_434:
 ErrorHandler_WithAddress:
 		disable_ints					; disable interrupts so we stay here
 		addq.w	#2,sp					; skip sr value
@@ -446,7 +446,7 @@ ErrorHandler_WithAddress:
 		bra.s	ErrorHandler_TryRecovery		; skip over
 ; ===========================================================================
 
-; loc_462:
+; loc_45C:
 ErrorHandler_WithoutAddress:
 		disable_ints					; disable interrupts so we stay here
 		movem.l	d0-a7,(v_regbuffer).w			; backup all registers values from before the crash
@@ -456,7 +456,7 @@ ErrorHandler_WithoutAddress:
 		bsr.w	ShowErrorValue				; write value to screen
 ; ---------------------------------------------------------------------------
 
-; loc_478:
+; loc_472:
 ErrorHandler_TryRecovery:
 		bsr.w	ErrorWaitForC				; loop until C has been pressed
 		movem.l	(v_regbuffer).w,d0-a7			; restore registers before exception
@@ -1192,7 +1192,7 @@ RunPLC:
 		move.w	(a0)+,d2				; load number of sections to decompress (Each section is $20 bytes)
 		bpl.s	.skipXor				; if this data doesn't use XOR variant, branch
 		adda.w	#NemPCD_WriteRowToVDP_XOR-NemPCD_WriteRowToVDP,a3 ; advance to XOR variant
-; loc_160E:
+; loc_1404:
 .skipXor:
 		andi.w	#$7FFF,d2				; clear XOR flag
 
@@ -1231,7 +1231,7 @@ RunPLC:
 ; (Note: Process"D"PLC is an old misnomer!)
 ; ---------------------------------------------------------------------------
 
-; sub_1642: ProcessDPLC_9Tiles:
+; sub_1438: ProcessDPLC_9Tiles:
 ProcessPLC_9Tiles:
 		tst.w	(v_plc_patternsleft).w			; is a section counter set (is art being decompressed)?
 		beq.w	ProcessPLC_Return			; if not, branch (nothing to decompress)
@@ -1243,7 +1243,7 @@ ProcessPLC_9Tiles:
 		bra.s	ProcessPLC				; continue
 ; ===========================================================================
 
-; sub_165E: ProcessDPLC2: ProcessPLC_3Tiles:
+; sub_1454: ProcessDPLC2: ProcessPLC_3Tiles:
 ProcessPLC_3Tiles:
 		tst.w	(v_plc_patternsleft).w			; is a section counter set (is art being decompressed)?
 		beq.s	ProcessPLC_Return			; if not, branch (nothing to decompress)
@@ -1255,7 +1255,7 @@ ProcessPLC_3Tiles:
 		; fall-through to ProcessPLC...
 ; ---------------------------------------------------------------------------
 
-; loc_1676: ProcessPLC:
+; loc_146C: ProcessPLC:
 ProcessPLC:
 		lea	(vdp_control_port).l,a4			; load VDP control port address
 		lsl.l	#2,d0					; get address MSB bits and send to LSB of long-word
@@ -1273,7 +1273,7 @@ ProcessPLC:
 		move.l	(v_plc_shiftvalue).w,d6			; load bit shift counter
 		lea	(v_ngfx_buffer).w,a1			; load RLE huffman buffer
 
-; loc_16AA:
+; loc_14A0:
 .loop:
 		movea.w	#8,a5					; set size of data to decompress (20 bytes, 1 tile)
 		bsr.w	NemPCD_NewRow				; continue the decompression
@@ -1294,12 +1294,12 @@ ProcessPLC_Return:
 		rts
 ; ===========================================================================
 
-; loc_16DC:
+; loc_14D2:
 ProcessPLC_ShiftCue:
 		lea	(v_plc_buffer).w,a0			; load PLC process list
 		moveq	#(v_plc_buffer_only_end-v_plc_buffer-plc_slot_size)/4-1,d0 ; set size of list
 
-; loc_16E2:
+; loc_14D8:
 .loop:
 		move.l	plc_slot_size(a0),(a0)+			; shift contents of PLC buffer up 6 bytes
 		dbf	d0,.loop				; repeat til done
