@@ -344,11 +344,7 @@ v_timingandscreenvariables_end:
 v_unused12:		ds.w	1				; value that's set to 1 during initation, unused otherwise (2 bytes)
 			ds.b	6				; unused
 v_unused13:		ds.w	1				; value that's set to 0 during initation of a level, unused otherwise (2 bytes)
-			ds.b	2				; unused
-v_sonfloorangle:	ds.b	1				; these values are unused here, but are put here to document how they are oddly used in the final to store floor information, it's uncertain if this was a debug function or not as it's only present in both Revision 0 and Revision 1 of Sonic 1, and does not appear in Sonic 2 Nick Arcade onwards.
-v_sonfloorangle2:	ds.b	1				; unused
-v_sonfloorangle3:	ds.b	1				; unused
-v_sonfloorangle4:	ds.b	1				; unused
+			ds.b	6				; unused
 f_demo:			ds.w	1
 v_demonum:		ds.w	1
 			ds.l	1				; unused

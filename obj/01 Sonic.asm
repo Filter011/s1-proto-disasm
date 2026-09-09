@@ -1217,19 +1217,14 @@ Sonic_JumpAngle:
 ; Subroutine for Sonic to interact with the floor after jumping/falling.
 ; To save on resources, the game will only check one out of four quadrants,
 ; depending on which direction Sonic moving toward the most.
-; This routine contains various writes to unused variables, likely used
-; during development to debug the collision system while in air.
 ; ---------------------------------------------------------------------------
 
 Sonic_Floor:
 		move.w	obVelX(a0),d1				; get current horizontal speed
 		move.w	obVelY(a0),d2				; get current vertical speed
 		jsr	(CalcAngle).l				; calculate arctan based on Sonic's current fall direction
-;		move.b	d0,(v_sonfloorangle).w			; (unused) store basic angle
 		subi.b	#$20,d0					; rotate 45 degrees counterclockwise
-;		move.b	d0,(v_sonfloorangle2).w			; (unused) store -45 degrees angle
 		andi.b	#$C0,d0					; snap to nearest multiple of 90 degrees
-;		move.b	d0,(v_sonfloorangle3).w			; (unused) store snapped angle
 
 		cmpi.b	#$40,d0					; is main movement direction to the left?
 		beq.w	Sonic_FloorLeft				; if yes, branch
@@ -1259,7 +1254,6 @@ Sonic_FloorDown:
 
 .norightgraze:
 		bsr.w	Sonic_FindFloor				; find distance between Sonic and floor
-;		move.b	d1,(v_sonfloorangle4).w			; (unused) store distance to floor
 		tst.w	d1					; has Sonic touched the floor again?
 		bpl.s	.return					; if not, branch
 		move.b	obVelY(a0),d0				; get Sonic's fall speed at the time of impact (upper byte only, pixel delta)
