@@ -3535,7 +3535,7 @@ ObjPos_Index:
 		dc.w ObjPos_CWZ3-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		dc.w ObjPos_CWZ1-ObjPos_Index, ObjPos_Null-ObjPos_Index
 		; No entries for Zone 6
-		dc.w $FFFF, 0, 0
+		dc.b $FF, $FF, 0, 0, 0,	0
 
 ObjPos_GHZ1:	binclude	"level/objpos/ghz1.bin"
 		even

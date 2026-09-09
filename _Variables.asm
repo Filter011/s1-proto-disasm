@@ -289,9 +289,9 @@ f_restart:		ds.w	1				; restart level flag (2 bytes)
 v_framecount:		ds.b	1				; frame counter (adds 1 every frame) (2 bytes)
 v_framebyte:		ds.b	1				; low byte for frame counter
 v_debugitem:		ds.w	1
-v_debuguse:		ds.w	1
-v_debugxspeed:		ds.b	1
-v_debugyspeed:		ds.b	1
+v_debuguse:		ds.w	1				; debug mode use & routine counter (when Sonic is a ring/item)
+v_debugspeedtimer:	ds.b	1				; debug mode - timer before movement starts
+v_debugspeed:		ds.b	1				; debug mode - movement speed
 v_vblank_count:		ds.w	1				; vertical interrupt counter (adds 1 every VBlank)
 v_vblank_word:		ds.b	1				; low word for vertical interrupt counter (2 bytes)
 v_vblank_byte:		ds.b	1				; low byte for vertical interrupt counter

@@ -8,7 +8,7 @@
 Debug_Coord_Sprites:
 		lea	(Debug_Coords_XY_Index).l,a0		; get index of x and y positions for the coords
 		lea	(v_debugnumbers1).w,a1			; set object RAM to load to
-		move.w	#(Debug_Coords_XY_Index_End-Debug_Coords_XY_Index)/4-1,d1 ; load 12 digits
+		move.w	#(Debug_Coords_XY_Index_end-Debug_Coords_XY_Index)/4-1,d1 ; load 12 digits
 
 .loop:
 		move.b	#id_Obj05,obID(a1)			; load object 05
@@ -35,14 +35,14 @@ Debug_Coords_XY_Index:
 		dc.w $160, $98
 		dc.w $168, $98
 		dc.w $170, $98
-Debug_Coords_XY_Index_End:
+Debug_Coords_XY_Index_end:
 
 ; ===========================================================================
 ; sub_2F24:
 Debug_Coord_B_Sprites:
 		lea	(Debug_Coords_B_XY_Index).l,a0		; get index of x and y positions for the coords
 		lea	(v_debugnumbers2).w,a1			; set object RAM to load to
-		move.w	#(Debug_Coords_B_XY_Index_End-Debug_Coords_B_XY_Index)/4-1,d1 ; load 52 digits
+		move.w	#(Debug_Coords_B_XY_Index_end-Debug_Coords_B_XY_Index)/4-1,d1 ; load 52 digits
 
 .loop:
 		move.b	#id_Obj05,obID(a1)			; load object 05
@@ -108,4 +108,4 @@ Debug_Coords_B_XY_Index:
 		dc.w $130, $A8
 		dc.w $138, $A8
 		dc.w $140, $A8
-Debug_Coords_B_XY_Index_End:
+Debug_Coords_B_XY_Index_end:

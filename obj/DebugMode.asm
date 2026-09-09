@@ -1,163 +1,272 @@
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; When Debug Mode is currently in use (entered from Sonic objects)
+; ---------------------------------------------------------------------------
+debug_movedelay:  equ 12	; frames to wait when holding down D-Pad before starting to move
+debug_startspeed: equ 15	; initial movement speed when first holding D-Pad
 ; ---------------------------------------------------------------------------
 
 DebugMode:
 		moveq	#0,d0
-		move.b	(v_debuguse).w,d0
-		move.w	off_11E74(pc,d0.w),d1
-		jmp	off_11E74(pc,d1.w)
+		move.b	(v_debuguse).w,d0			; get debug mode state (0 if just launched, 2 if already active)
+		move.w	Debug_Index(pc,d0.w),d1			; find relevant section in offset table
+		jmp	Debug_Index(pc,d1.w)			; jump to that label
 ; ===========================================================================
-off_11E74:
-		dc.w	loc_11E78-off_11E74
-		dc.w	loc_11EB8-off_11E74
+Debug_Index:
+		dc.w	Debug_Init-Debug_Index			; 0 - init
+		dc.w	Debug_Action-Debug_Index		; 2 - main mode
 ; ===========================================================================
 
-loc_11E78:
-		addq.b	#2,(v_debuguse).w
-		move.b	#0,obFrame(a0)
-		move.b	#0,obAnim(a0)
+; Debug_Main:
+Debug_Init:	; Routine 0
+		addq.b	#2,(v_debuguse).w			; set to Debug_Action
+
+		move.b	#fr_Null,obFrame(a0)			; set Sonic's frame to null (blank)
+		move.b	#id_Walk,obAnim(a0)			; set Sonic's animation to walk (0)
+
 		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		lea	(DebugLists).l,a2
-		add.w	d0,d0
-		adda.w	(a2,d0.w),a2
-		move.w	(a2)+,d6
-		cmp.b	(v_debugitem).w,d6
-		bhi.s	loc_11EA8
-		move.b	#0,(v_debugitem).w
+		move.b	(v_zone).w,d0				; get current Zone ID
+		lea	(DebugList).l,a2			; load debug item index list
+		add.w	d0,d0					; double for word-based indexing
+		adda.w	(a2,d0.w),a2				; go to debug item list for Zone ID
+		move.w	(a2)+,d6				; load number of entries in debug item list
+		cmp.b	(v_debugitem).w,d6			; is currently selected item index past end of list?
+		bhi.s	.finishDebugSetup			; if not, branch
+		move.b	#0,(v_debugitem).w			; go back to start of list
 
-loc_11EA8:
-		bsr.w	sub_11FCE
-		move.b	#$C,(v_debugxspeed).w
-		move.b	#1,(v_debugyspeed).w
+	.finishDebugSetup:
+		bsr.w	Debug_ShowItem				; load selected item graphics when entering debug mode
+		move.b	#debug_movedelay,(v_debugspeedtimer).w
+	if FixBugs
+		; If the D-Pad is held while entering debug mode, the initial move speed
+		; is incredibly slow. The cause is this value getting set to just a 1,
+		; instead of the normal 15 when no D-Pad button is pressed in Debug_Control.
+		move.b	#debug_startspeed,(v_debugspeed).w	; set initial move speed (normal)
+	else
+		move.b	#1,(v_debugspeed).w			; set initial move speed (just 1)
+	endif
+; ---------------------------------------------------------------------------
 
-loc_11EB8:
+Debug_Action:	; Routine 2
 		moveq	#0,d0
-		move.b	(v_zone).w,d0
-		lea	(DebugLists).l,a2
-		add.w	d0,d0
-		adda.w	(a2,d0.w),a2
-		move.w	(a2)+,d6
-		bsr.w	sub_11ED6
-		jmp	(DisplaySprite).l
-; ===========================================================================
+		move.b	(v_zone).w,d0				; use Zone ID to select debug list
+		lea	(DebugList).l,a2			; load debug item index list
+		add.w	d0,d0					; double for word-based indexing
+		adda.w	(a2,d0.w),a2				; go to debug item list for Zone ID
+		move.w	(a2)+,d6				; load number of entries in debug item list
 
-sub_11ED6:
-		moveq	#0,d4
-		move.w	#1,d1
-		move.b	(v_jpadpress1).w,d4
-		bne.s	loc_11F0E
-		tst.b	(v_jpadhold1).w
-		bne.s	loc_11EF6
-		move.b	#$C,(v_debugxspeed).w
-		move.b	#$F,(v_debugyspeed).w
+		bsr.w	Debug_Control				; allow movement and object spawning, and update graphics
+		jmp	(DisplaySprite).l			; display debug object
+; End of function DebugMode
+
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Subroutine to allow movement in debug mode, spawning objects,
+; and updating displayed debug object sprite graphics.
+; ---------------------------------------------------------------------------
+
+Debug_Control:
+		moveq	#0,d4					; clear d4 for button input buffer
+		move.w	#1,d1					; set d1 to 1 (useless, cleared again below)
+
+		move.b	(v_jpadpress1).w,d4			; get buttons that were pressed this frame
+		bne.s	Debug_Move_GetDirections		; if any button was pressed, branch (immediately move a bit)
+
+		tst.b	(v_jpadhold1).w				; get buttons that were already held down
+		bne.s	Debug_Move_Delay			; if any button was held down, branch
+
+		; No D-Pad buttons were pressed...
+		move.b	#debug_movedelay,(v_debugspeedtimer).w	; reset movement delay
+		move.b	#debug_startspeed,(v_debugspeed).w	; reset initial move speed
 		rts
-; ===========================================================================
 
-loc_11EF6:
-		subq.b	#1,(v_debugxspeed).w
-		bne.s	loc_11F12
-		move.b	#1,(v_debugxspeed).w
-		addq.b	#1,(v_debugyspeed).w
-		bne.s	loc_11F0E
-		move.b	#-1,(v_debugyspeed).w
+; ---------------------------------------------------------------------------
+; Allow freely moving around in debug mode
+; ---------------------------------------------------------------------------
 
-loc_11F0E:
-		move.b	(v_jpadhold1).w,d4
+Debug_Move_Delay:
+		subq.b	#1,(v_debugspeedtimer).w		; decrement delay for held buttons before moving
+		bne.s	Debug_Move				; if time remains, branch
+		move.b	#1,(v_debugspeedtimer).w		; keep delay to 1 so that the above branch keeps triggering
+		addq.b	#1,(v_debugspeed).w			; accelerate speed for held D-Pad
+		bne.s	Debug_Move_GetDirections		; if speed didn't reach max yet, branch
+		move.b	#$FF,(v_debugspeed).w			; keep speed fixed at max until D-Pad is released again
 
-loc_11F12:
+Debug_Move_GetDirections:
+		move.b	(v_jpadhold1).w,d4			; get held buttons for the directional checks
+
+Debug_Move:
 		moveq	#0,d1
-		move.b	(v_debugyspeed).w,d1
-		addq.w	#1,d1
-		swap	d1
-		asr.l	#4,d1
-		move.l	obY(a0),d2
-		move.l	obX(a0),d3
-		btst	#bitUp,d4
-		beq.s	loc_11F32
-		sub.l	d1,d2
-		bcc.s	loc_11F32
-		moveq	#0,d2
+		move.b	(v_debugspeed).w,d1			; get current debug move speed
+		addq.w	#1,d1					; add one unit to base speed (at max speed, $FF+1=$100)
+		swap	d1					; move delta to upper word (calculations use longwords for subpixels)
+		asr.l	#4,d1					; divide speed by 16 to reasonably slow it down (upper nybble is pixels per frame)
 
-loc_11F32:
-		btst	#bitDn,d4
-		beq.s	loc_11F48
-		add.l	d1,d2
-		cmpi.l	#$7FF0000,d2
-		bcs.s	loc_11F48
-		move.l	#$7FF0000,d2
+		move.l	obY(a0),d2				; d2 = current debug object Y-position
+		move.l	obX(a0),d3				; d3 = current debug object X-position
 
-loc_11F48:
-		btst	#bitL,d4
-		beq.s	loc_11F54
-		sub.l	d1,d3
-		bcc.s	loc_11F54
-		moveq	#0,d3
+	.chkUp:
+		btst	#bitUp,d4				; is up being held?
+		beq.s	.chkDown				; if not, branch
+		sub.l	d1,d2					; move up
+	if FixBugs
+		; These boundary checks only consider absolute values, which allows going offscreen.
+		; From Sonic 2 onward, the active level boundaries are instead used for the checks.
+		; Left/right bounds technically lack those fixes, they were added here for consistency.
+		moveq	#0,d0					; clear d0
+		move.w	(v_limittop2).w,d0			; get current top level boundary
+		swap	d0					; move to upper word for long comparison
+		cmp.l	d0,d2					; would new Y-position exceed top level boundary?
+		bge.s	.chkDown				; if not, branch
+		move.l	d0,d2					; keep Y-position within top level bound
+	else
+		bcc.s	.chkDown				; would new Y-position underflow? if not, branch
+		moveq	#0,d2					; keep Y-position within absolute top bound
+	endif
 
-loc_11F54:
-		btst	#bitR,d4
-		beq.s	loc_11F5C
-		add.l	d1,d3
+	.chkDown:
+		btst	#bitDn,d4				; is down being held?
+		beq.s	.chkLeft				; if not, branch
+		add.l	d1,d2					; move down
+	if FixBugs
+		; See above.
+		moveq	#0,d0					; clear d0
+		move.w	(v_limitbtm2).w,d0			; get current bottom level boundary
+		addi.w	#224-1,d0				; add screen height
+		swap	d0					; move to upper word for long comparison
+		cmp.l	d0,d2					; would new Y-position exceed bottom level boundary?
+		blt.s	.chkLeft				; if not, branch
+		move.l	d0,d2					; keep Y-position within bottom level bound
+	else
+		cmpi.l	#$7FF<<16,d2				; would new Y-position exceed maximum bottom?
+		blo.s	.chkLeft				; if not, branch
+		move.l	#$7FF<<16,d2				; keep Y-position within bottom bound
+	endif
 
-loc_11F5C:
-		move.l	d2,obY(a0)
-		move.l	d3,obX(a0)
-		btst	#bitA,(v_jpadpress2).w
-		beq.s	loc_11F80
-		addq.b	#1,(v_debugitem).w
-		cmp.b	(v_debugitem).w,d6
-		bhi.s	loc_11F7C
-		move.b	#0,(v_debugitem).w
+	.chkLeft:
+		btst	#bitL,d4				; is left being held?
+		beq.s	.chkRight				; if not, branch
+		sub.l	d1,d3					; move left
+	if FixBugs
+		; See above.
+		moveq	#0,d0					; clear d0
+		move.w	(v_limitleft2).w,d0			; get current left level boundary
+		swap	d0					; move to upper word for long comparison
+		cmp.l	d0,d3					; would new X-position exceed left level boundary?
+		bge.s	.chkRight				; if not, branch
+		move.l	d0,d3					; keep X-position within left level bound
+	else
+		bcc.s	.chkRight				; would new X-position underflow? if not, branch
+		moveq	#0,d3					; keep X-position within absolute left bound
+	endif
 
-loc_11F7C:
-		bra.w	sub_11FCE
+	.chkRight:
+		btst	#bitR,d4				; is right being held?
+		beq.s	.setNewDebugPosition			; if not, branch
+		add.l	d1,d3					; move right
+	if FixBugs
+		; See above. Also, right side lacked any boundary check to begin with.
+		moveq	#0,d0					; clear d0
+		move.w	(v_limitright2),d0			; get current right level boundary
+		addi.w	#320-1,d0				; add screen width
+		swap	d0					; move to upper word for long comparison
+		cmp.l	d0,d3					; would new X-position exceed right level boundary?
+		blt.s	.setNewDebugPosition			; if not, branch
+		move.l	d0,d3					; keep X-position within right level bound
+	endif
+
+.setNewDebugPosition:
+		move.l	d2,obY(a0)				; set new Y-position
+		move.l	d3,obX(a0)				; set new X-position
+		; continue to Debug_ChgItem...
+
+; ---------------------------------------------------------------------------
+; Allow spawning debug objects and cycling through item list
+; ---------------------------------------------------------------------------
+
+Debug_ChgItem:
+		; Cycle forwards one item in list when pressing A
+		btst	#bitA,(v_jpadpress2).w			; is button A pressed?
+		beq.s	.checkCreateItem			; if not, branch
+		addq.b	#1,(v_debugitem).w			; go forwards 1 item
+		cmp.b	(v_debugitem).w,d6			; is newly selected item index past end of list?
+		bhi.s	.display				; if not, branch
+		move.b	#0,(v_debugitem).w			; go back to start of list
+
+	.display:
+		bra.w	Debug_ShowItem				; update displayed sprite for debug object
 ; ===========================================================================
 
-loc_11F80:
-		btst	#bitC,(v_jpadpress2).w
-		beq.s	loc_11FA4
-		jsr	(FindFreeObj).l
-		bne.s	loc_11FA4
-		move.w	obX(a0),obX(a1)
-		move.w	obY(a0),obY(a1)
-		_move.b	obMap(a0),obID(a1)
+.checkCreateItem:
+		; Spawn new object when pressing C
+		btst	#bitC,(v_jpadpress2).w			; is button C pressed?
+		beq.s	Debug_ExitDebugMode			; if not, branch
+
+		jsr	(FindFreeObj).l				; find a free object slot
+		bne.s	Debug_ExitDebugMode			; if none are free, branch
+	if FixBugs
+		; Fix not being able to place more rings and such after collecting one
+		clr.b	(v_objstate+2).w			; free up object state for spawned object (target for obRespawnNo=0)
+	endif
+		move.w	obX(a0),obX(a1)				; set new object's X-position
+		move.w	obY(a0),obY(a1)				; set new object's Y-position
+		_move.b	obMap(a0),obID(a1)			; create object (ID is stored in list with mappings as map+(object<<24))
 		rts
-; ===========================================================================
 
-loc_11FA4:
-		btst	#bitB,(v_jpadpress2).w
-		beq.s	locret_11FCC
+; ---------------------------------------------------------------------------
+; Allow exiting debug mode to revert back to normal Sonic state
+; ---------------------------------------------------------------------------
+
+Debug_ExitDebugMode:
+		btst	#bitB,(v_jpadpress2).w			; is button B pressed?
+		beq.s	.return					; if not, stay in debug mode
+
+		moveq	#0,d0					; prepare 0 value
+		move.w	d0,(v_debuguse).w			; deactivate debug mode
+		move.l	#Map_Sonic,(v_player+obMap).w		; reset Sonic's mappings
+		move.w	#ArtTile_Sonic,(v_player+obGfx).w	; reset Sonic's art tile
+		move.b	d0,(v_player+obAnim).w			; reset Sonic's animation to walking
+		move.w	d0,obSubpixelX(a0)			; clear Sonic's X subpixel portion
+		move.w	d0,obSubpixelY(a0)			; clear Sonic's Y subpixel portion
+
+	.return:
+		rts
+; End of function Debug_Control
+
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Subroutine to set mappings and graphics for displayed debug object.
+; Each entry in DebugList is 8 bytes in the following format:
+; 	0:   object ID
+;	0-3: mappings address (upper byte is ignored for 24-bit addressing)
+;	4:   subtype
+;	5:   frame ID
+;	6-7: VRAM settings
+; ---------------------------------------------------------------------------
+
+Debug_ShowItem:
 		moveq	#0,d0
-		move.w	d0,(v_debuguse).w
-		move.l	#Map_Sonic,(v_player+obMap).w
-		move.w	#ArtTile_Sonic,(v_player+obGfx).w
-		move.b	d0,(v_player+obAnim).w
-		move.w	d0,obX+2(a0)
-		move.w	d0,obY+2(a0)
-
-locret_11FCC:
+		move.b	(v_debugitem).w,d0			; get currently selected item in debug list
+		lsl.w	#3,d0					; each entry is 8 bytes
+		move.l	(a2,d0.w),obMap(a0)			; load mappings for displayed item
+		move.w	6(a2,d0.w),obGfx(a0)			; load VRAM setting for displayed item
+		move.b	5(a2,d0.w),obFrame(a0)			; load frame number for displayed item
 		rts
-; ===========================================================================
+; End of function Debug_ShowItem
 
-sub_11FCE:
-		moveq	#0,d0
-		move.b	(v_debugitem).w,d0
-		lsl.w	#3,d0
-		move.l	(a2,d0.w),obMap(a0)
-		move.w	6(a2,d0.w),obGfx(a0)
-		move.b	5(a2,d0.w),obFrame(a0)
-		rts
 
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Debug mode item lists
 ; ---------------------------------------------------------------------------
-DebugLists:
-		dc.w .GHZ-DebugLists
-		dc.w .LZ-DebugLists
-		dc.w .MZ-DebugLists
-		dc.w .SLZ-DebugLists
-		dc.w .SZ-DebugLists
-		dc.w .CWZ-DebugLists
+DebugList:
+		dc.w .GHZ-DebugList
+		dc.w .LZ-DebugList
+		dc.w .MZ-DebugList
+		dc.w .SLZ-DebugList
+		dc.w .SZ-DebugList
+		dc.w .CWZ-DebugList
 
 dbug:		macro map,object,subtype,frame,vram
 		dc.l map+(object<<24)
@@ -165,8 +274,14 @@ dbug:		macro map,object,subtype,frame,vram
 		dc.w vram
 		endm
 
-.GHZ:
-		dc.w (.GHZend-.GHZ-2)/8
+dbugheader:	macro	{INTLABEL}
+__LABEL__:	label	*
+		dc.w	((__LABEL___end)-(__LABEL__)-2)/8
+		endm
+
+; ---------------------------------------------------------------------------
+
+.GHZ:		dbugheader
 		;	mappings	object			subtype	frame	VRAM setting
 		dbug 	Map_Ring,	id_Rings,		0,	0,	ArtTile_Ring|Tile_Pal2
 		dbug	Map_Monitor,	id_Monitor,		0,	0,	ArtTile_Monitor
@@ -181,18 +296,20 @@ dbug:		macro map,object,subtype,frame,vram
 		dbug	Map_Newt,	id_Newtron,		0,	0,	ArtTile_Newtron|Tile_Pal2
 		dbug	Map_Edge,	id_EdgeWalls,		0,	0,	ArtTile_GHZ_Edge_Wall|Tile_Pal3
 		dbug	Map_GBall,	id_GHZBall,		0,	0,	ArtTile_GHZ_Giant_Ball|Tile_Pal3
-.GHZend:
+.GHZ_end:
 
-.LZ:
-		dc.w (.LZend-.LZ-2)/8
+; ---------------------------------------------------------------------------
+
+.LZ:		dbugheader
 		;	mappings	object			subtype	frame	VRAM setting
 		dbug 	Map_Ring,	id_Rings,		0,	0,	ArtTile_Ring|Tile_Pal2
 		dbug	Map_Monitor,	id_Monitor,		0,	0,	ArtTile_Monitor
 		dbug	Map_Crab,	id_Crabmeat,		0,	0,	ArtTile_Crabmeat
-.LZend:
+.LZ_end:
 
-.MZ:
-		dc.w (.MZend-.MZ-2)/8
+; ---------------------------------------------------------------------------
+
+.MZ:		dbugheader
 		;	mappings	object			subtype	frame	VRAM setting
 		dbug 	Map_Ring,	id_Rings,		0,	0,	ArtTile_Ring|Tile_Pal2
 		dbug	Map_Monitor,	id_Monitor,		0,	0,	ArtTile_Monitor
@@ -223,10 +340,11 @@ dbug:		macro map,object,subtype,frame,vram
 	endif
 		dbug	Map_LTag,	id_LavaTag,		0,	0,	ArtTile_Monitor|Tile_Prio
 		dbug	Map_Bas,	id_Basaran,		0,	0,	ArtTile_Basaran|Tile_Pal2
-.MZend:
+.MZ_end:
 
-.SLZ:
-		dc.w (.SLZend-.SLZ-2)/8
+; ---------------------------------------------------------------------------
+
+.SLZ:		dbugheader
 		;	mappings	object			subtype	frame	VRAM setting
 		dbug 	Map_Ring,	id_Rings,		0,	0,	ArtTile_Ring|Tile_Pal2
 		dbug	Map_Monitor,	id_Monitor,		0,	0,	ArtTile_Monitor
@@ -241,10 +359,11 @@ dbug:		macro map,object,subtype,frame,vram
 		dbug	Map_Fire,	id_LavaMaker,		0,	0,	ArtTile_SLZ_Fireball
 		dbug	Map_Crab,	id_Crabmeat,		0,	0,	ArtTile_Crabmeat
 		dbug	Map_Buzz,	id_BuzzBomber,		0,	0,	ArtTile_Buzz_Bomber
-.SLZend:
+.SLZ_end:
 
-.SZ:
-		dc.w (.SZend-.SZ-2)/8
+; ---------------------------------------------------------------------------
+
+.SZ:		dbugheader
 		;	mappings	object			subtype	frame	VRAM setting
 		dbug 	Map_Ring,	id_Rings,		0,	0,	ArtTile_Ring|Tile_Pal2
 		dbug	Map_Monitor,	id_Monitor,		0,	0,	ArtTile_Monitor
@@ -264,17 +383,20 @@ dbug:		macro map,object,subtype,frame,vram
 		dbug	Map_Plat_SZ,	id_BasicPlatform,	0,	0,	ArtTile_Level|Tile_Pal3
 		dbug	Map_FBlock,	id_FloatingBlock,	0,	0,	ArtTile_Level|Tile_Pal3
 		dbug	Map_But,	id_Button,		0,	0,	ArtTile_Button+4
-.SZend:
+.SZ_end:
 
-.CWZ:
-		dc.w (.CWZend-.CWZ-2)/8
+; ---------------------------------------------------------------------------
+
+.CWZ:		dbugheader
 		;	mappings	object			subtype	frame	VRAM setting
 		dbug 	Map_Ring,	id_Rings,		0,	0,	ArtTile_Ring|Tile_Pal2
 		dbug	Map_Monitor,	id_Monitor,		0,	0,	ArtTile_Monitor
 		dbug	Map_Crab,	id_Crabmeat,		0,	0,	ArtTile_Crabmeat
-.CWZend:
+.CWZ_end:
 
-;.DebugUnused:
+; ---------------------------------------------------------------------------
+
+;.DebugUnused:	dbugheader
 		;	mappings	object			subtype	frame	VRAM setting
 		dbug 	Map_Hog,	id_BallHog,		0,	0,	ArtTile_Ball_Hog|Tile_Pal2
 		dbug	Map_Jaws,	id_Jaws,		0,	0,	ArtTile_Jaws
@@ -284,4 +406,4 @@ dbug:		macro map,object,subtype,frame,vram
 		; This uses Jaws's art tile instead of Burrobot's art tile.
 		dbug	Map_Burro,	id_Burrobot,		0,	0,	ArtTile_Jaws|Tile_Pal2
 	endif
-;.DebugUnusedend:
+;.DebugUnused_end:
