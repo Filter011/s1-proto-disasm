@@ -226,13 +226,13 @@ Swing_UpdateSwingPosition:
 		move.b	(a2)+,d6				; get number of objects in chain
 
 	.loopSwing:
-		moveq	#0,d4					; clear d4
+		moveq	#0,d4
 		move.b	(a2)+,d4				; get next RAM index for object
 		lsl.w	#object_size_bits,d4			; multiply by $40 (object_size)
 		addi.l	#v_objspace&$FFFFFF,d4			; add base object RAM offset
 		movea.l	d4,a1					; a1 = full RAM address to object
 
-		moveq	#0,d4					; clear d4
+		moveq	#0,d4
 		move.b	swing_radius(a1),d4			; get radius for object
 		move.l	d4,d5					; duplicate radius
 		muls.w	d0,d4					; multiply radius by sine value

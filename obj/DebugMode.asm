@@ -114,7 +114,7 @@ Debug_Move:
 		; These boundary checks only consider absolute values, which allows going offscreen.
 		; From Sonic 2 onward, the active level boundaries are instead used for the checks.
 		; Left/right bounds technically lack those fixes, they were added here for consistency.
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.w	(v_limittop2).w,d0			; get current top level boundary
 		swap	d0					; move to upper word for long comparison
 		cmp.l	d0,d2					; would new Y-position exceed top level boundary?
@@ -131,7 +131,7 @@ Debug_Move:
 		add.l	d1,d2					; move down
 	if FixBugs
 		; See above.
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.w	(v_limitbtm2).w,d0			; get current bottom level boundary
 		addi.w	#224-1,d0				; add screen height
 		swap	d0					; move to upper word for long comparison
@@ -150,7 +150,7 @@ Debug_Move:
 		sub.l	d1,d3					; move left
 	if FixBugs
 		; See above.
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.w	(v_limitleft2).w,d0			; get current left level boundary
 		swap	d0					; move to upper word for long comparison
 		cmp.l	d0,d3					; would new X-position exceed left level boundary?
@@ -167,7 +167,7 @@ Debug_Move:
 		add.l	d1,d3					; move right
 	if FixBugs
 		; See above. Also, right side lacked any boundary check to begin with.
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.w	(v_limitright2),d0			; get current right level boundary
 		addi.w	#320-1,d0				; add screen width
 		swap	d0					; move to upper word for long comparison

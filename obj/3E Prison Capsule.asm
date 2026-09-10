@@ -48,7 +48,7 @@ Pri_Main:	; Routine 0
 		move.b	#sprite_cam_field,obRender(a0)		; set to playfield-positioned mode
 		move.w	obY(a0),pri_origY(a0)			; remember initial Y-position
 
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obSubtype(a0),d0			; get prison subtype
 		lsl.w	#2,d0					; multiply by 4 bytes per entry
 		lea	Pri_Var(pc,d0.w),a1			; get values for subtype

@@ -59,7 +59,7 @@ Anml_Main:	; Routine 0
 
 		bsr.w	RandomNumber				; get random number to select animal to spawn
 		andi.w	#1,d0					; limit to two choices
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	(v_zone).w,d1				; get current zone ID
 		add.w	d1,d1					; double for word-based addressing
 		add.w	d0,d1					; add random result

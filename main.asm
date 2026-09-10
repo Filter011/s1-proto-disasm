@@ -165,8 +165,8 @@ SkipSetup:
 
 SkipSecurity:
 		move.w	(a4),d0					; clear write-pending flag in VDP (prevents issues if 68k was reset while writing a command to VDP)
-		moveq	#0,d0					; clear d0
-		movea.l	d0,a6					; clear a6
+		moveq	#0,d0
+		movea.l	d0,a6
 		move.l	a6,usp					; set usp to $0
 
 		moveq	#SetupValues_VDP_End-SetupValues_VDP-1,d1 ; write to all VDP registers
@@ -313,7 +313,7 @@ CheckSumCheck:
 		movea.l	#EndOfHeader,a0				; start checking bytes after the header ($200)
 		movea.l	#ROMEndLoc,a1				; stop at end of ROM
 		move.l	(a1),d0					; retrieve long of ROM end
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 	.loop:	add.w	(a0)+,d1				; add next byte value of ROM word
 		cmp.l	a0,d0					; has iterator reached end of ROM?
 		bhs.s	.loop					; if not, loop until so
@@ -472,18 +472,18 @@ ShowErrorMessage:
 .loadgfx:	move.w	(a0)+,(a6)				; dump graphics to VRAM
 		dbf	d1,.loadgfx				; loop until font has been loaded
 
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	(v_errortype).w,d0			; load error code
 		move.w	ErrorText(pc,d0.w),d0			; find offset in error texts array
 		lea	ErrorText(pc,d0.w),a0			; load error text for error code
 		locVRAM	vram_fg+(12*$80)+(2*2)			; write error message directly to plane A nametable (row 12 + column 2 = $C04)
 		moveq	#19-1,d1				; number of characters in error text message (minus 1)
-.showchars:	moveq	#0,d0					; clear d0
+.showchars:	moveq	#0,d0
 		move.b	(a0)+,d0				; get next character from error text
 		addi.w	#-'0'+ArtTile_Error_Handler_Font,d0	; rebase from ASCII to a VRAM index
 		move.w	d0,(a6)					; write to VRAM
 		dbf	d1,.showchars				; repeat for number of characters
-		rts						; return
+		rts
 ; End of function ShowErrorMessage
 ; ===========================================================================
 
@@ -521,7 +521,7 @@ ShowErrorValue:
 	.loop:	rol.l	#4,d0					; shift to next digit
 		bsr.s	.writeDigit				; write number to VRAM
 		dbf	d2,.loop				; loop until done
-		rts						; return
+		rts
 ; ---------------------------------------------------------------------------
 
 .writeDigit:
@@ -532,7 +532,7 @@ ShowErrorValue:
 		addq.w	#7,d1					; adjust tile offset for hex letters
 	.write:	addi.w	#ArtTile_Error_Handler_Font,d1		; add art tile offset
 		move.w	d1,(a6)					; write to VRAM nametable
-		rts						; return
+		rts
 ; End of function ShowErrorValue
 ; ===========================================================================
 
@@ -1249,7 +1249,7 @@ ProcessPLC_3Tiles:
 		beq.s	ProcessPLC_Return			; if not, branch (nothing to decompress)
 
 		move.w	#3,(v_plc_framepatternsleft).w		; set tile counter to 3 (number of tiles to decompress in a frame)
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.w	(v_plc_buffer_dest).w,d0		; load VRAM address for this frame
 		addi.w	#3*tile_size,(v_plc_buffer_dest).w	; increase address for next frame
 		; fall-through to ProcessPLC...
@@ -1337,7 +1337,7 @@ QuickPLC:
 
 .loop:
 		movea.l	(a1)+,a0				; load Nemesis art address
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.w	(a1)+,d0				; load VRAM dump address
 		lsl.l	#2,d0					; get address MSB bits and send to LSB of long-word
 		lsr.w	#2,d0					; send rest back
@@ -2470,41 +2470,44 @@ Anim16MZ:	bincludeEndMarker	"level/map16/Anim MZ.bin"
 DebugPosLoadArt:
 		rts
 
-		locVRAM ArtTile_Debug_Numbers*tile_size
-		lea	(Art_Text).l,a0
-		move.w	#(Art_Text_end-Art_Text-tile_size*31)/2-1,d1
-		bsr.s	.loadText
-		lea	(Art_Text).l,a0
-		adda.w	#tile_size*17,a0
-		move.w	#(Art_Text_end-Art_Text-tile_size*35)/2-1,d1
+		locVRAM ArtTile_Debug_Numbers*tile_size		; set VRAM location
+		lea	(Art_Text).l,a0				; load text art
+		move.w	#(tile_size*10)/2-1,d1			; write 10 tiles (numbers 0 to 9)
+		bsr.s	.writeText				; write debug numbers art
+		lea	(Art_Text).l,a0				; load text art
+		adda.w	#tile_size*17,a0			; skip 17 tiles (start at A)
+		move.w	#(tile_size*6)/2-1,d1			; write 6 tiles (hexes A to F)
 
-	.loadText:
-		move.w	(a0)+,(vdp_data_port).l
-		dbf	d1,.loadText
+	.writeText:
+		move.w	(a0)+,(vdp_data_port).l			; write to VDP data port
+		dbf	d1,.writeText
 		rts
 ; ===========================================================================
 
-;1bppConvert:
+	.1bppConvert:
 		moveq	#0,d0
-		move.b	(a0)+,d0
-		ror.w	#1,d0
-		lsr.b	#3,d0
-		rol.w	#1,d0
-		move.b	.1bpp(pc,d0.w),d2
-		lsl.w	#8,d2
+		move.b	(a0)+,d0				; get byte from Art_Text
+		ror.w	#1,d0					; rotate right by 1 in word
+		lsr.b	#3,d0					; divide byte by 8
+		rol.w	#1,d0					; rotate left by 1 in word
+		move.b	.1bpp(pc,d0.w),d2			; get table and store in d2
+		lsl.w	#8,d2					; shift up a byte
 		moveq	#0,d0
-		move.b	(a0)+,d0
-		ror.w	#1,d0
-		lsr.b	#3,d0
-		rol.w	#1,d0
-		move.b	.1bpp(pc,d0.w),d2
-		move.w	d2,(vdp_data_port).l
-		dbf	d1,.loadText
+		move.b	(a0)+,d0				; get next byte from Art_Text
+		ror.w	#1,d0					; rotate right by 1 in word
+		lsr.b	#3,d0					; divide byte by 8
+		rol.w	#1,d0					; rotate left by 1 in word
+		move.b	.1bpp(pc,d0.w),d2			; get table and store in d2
+		move.w	d2,(vdp_data_port).l			; write to VDP data port
+		dbf	d1,.writeText
 		rts
 ; ===========================================================================
 
-.1bpp:
-		dc.b	$00, $06, $60, $66
+	.1bpp:
+		dc.b	%0000
+		dc.b	%0110
+		dc.b	%0110<<4
+		dc.b	%01100110
 		even
 
 ; ===========================================================================

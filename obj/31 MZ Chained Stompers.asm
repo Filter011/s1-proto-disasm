@@ -9,11 +9,12 @@ ChainStomp:
 		move.w	CStom_Index(pc,d0.w),d1
 		jmp	CStom_Index(pc,d1.w)
 ; ===========================================================================
-CStom_Index:	dc.w CStom_Main-CStom_Index		; 0
-		dc.w CStom_MainBlock-CStom_Index	; 2
-		dc.w CStom_Spikes-CStom_Index		; 4
-		dc.w CStom_Ceiling-CStom_Index		; 6
-		dc.w CStom_Chain-CStom_Index		; 8
+CStom_Index:
+		dc.w	CStom_Main-CStom_Index		; 0
+		dc.w	CStom_MainBlock-CStom_Index	; 2
+		dc.w	CStom_Spikes-CStom_Index	; 4
+		dc.w	CStom_Ceiling-CStom_Index	; 6
+		dc.w	CStom_Chain-CStom_Index		; 8
 
 cstom_origY:	equ objoff_30		; initial Y-position
 cstom_current:	equ objoff_32		; current distance the stomper is extended
@@ -169,7 +170,7 @@ CStom_Chain:	; Routine 8
 
 CStom_Spikes:	; Routine 4
 		movea.l	cstom_parent(a0),a1			; load parent metal block object
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	cstom_current(a1),d0			; get current extension length of block
 		add.w	cstom_origY(a0),d0			; add initial Y-position
 		move.w	d0,obY(a0)				; align child object with main metal block as it moves
@@ -187,7 +188,7 @@ CStom_ChkDel:
 		; the same frame or else cause a null-pointer dereference.
 		bra.w	DisplaySprite				; display sprite
 	else
-		rts						; return
+		rts
 	endif
 
 ; ===========================================================================

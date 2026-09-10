@@ -23,7 +23,7 @@ MvSonicOnPtfm2:	; assume platform height (fixed to 9px)
 
 ; MvSonic2:
 MoveWithPlatform:
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	obHeight(a1),d1				; get Sonic's current height
 		sub.w	d1,d0					; d1 = Y-position so Sonic's feet are on the platform
 		move.w	d0,obY(a1)				; set that as Sonic's new Y-position
@@ -32,5 +32,5 @@ MoveWithPlatform:
 		sub.w	d2,obX(a1)				; update Sonic's X-position to move with the platform
 
 	.return:
-		rts						; return
+		rts
 ; End of function MvSonicOnPtfm

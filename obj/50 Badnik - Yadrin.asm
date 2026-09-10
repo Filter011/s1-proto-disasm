@@ -87,7 +87,7 @@ Yad_Action_Move:
 
 		bsr.w	ChkHitLeftRightWall			; has Yadrin hit a left or right wall?
 		bne.s	.pause					; if yes, branch
-		rts						; return
+		rts
 ; ---------------------------------------------------------------------------
 
 	.pause:

@@ -300,7 +300,7 @@ Fragmentate_GHZLedge_NoReset:
 ; ---------------------------------------------------------------------------
 
 FragmentatePlatform:
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obFrame(a0),d0				; get current frame ID
 		add.w	d0,d0					; double it for word-based indexing
 		movea.l	obMap(a0),a3				; get object mappings pointer

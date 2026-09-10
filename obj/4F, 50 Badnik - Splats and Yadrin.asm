@@ -102,7 +102,7 @@ ChkHitLeftRightWall:
 		add.w	d7,d0					; add object object enumerator from RAM
 		andi.w	#3,d0					; and by 3 (effectively makes it so it's only checked every 4 frames, presumably for performance reasons)
 		bne.s	.nowallhit				; if outside a 4th frame, branch
-		moveq	#0,d3					; clear d3
+		moveq	#0,d3
 		move.b	obActWid(a0),d3				; load object width to d3 (input param for wall col detection subroutines)
 		tst.w	obVelX(a0)				; is object moving to the left?
 		bmi.s	.chkleftwall				; if yes, branch
@@ -218,7 +218,7 @@ Yad_Action_Move:
 
 		bsr.w	ChkHitLeftRightWall			; has Yadrin hit a left or right wall?
 		bne.s	.pause					; if yes, branch
-		rts						; return
+		rts
 ; ---------------------------------------------------------------------------
 
 	.pause:

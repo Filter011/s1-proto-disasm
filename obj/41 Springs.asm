@@ -19,16 +19,17 @@ Springs:
 		rts
 	endif
 ; ===========================================================================
-Spring_Index:	dc.w Spring_Main-Spring_Index		; 0
-		dc.w Spring_Up-Spring_Index		; 2
-		dc.w Spring_AniUp-Spring_Index		; 4
-		dc.w Spring_ResetUp-Spring_Index	; 6
-		dc.w Spring_LR-Spring_Index		; 8
-		dc.w Spring_AniLR-Spring_Index		; A
-		dc.w Spring_ResetLR-Spring_Index	; C
-		dc.w Spring_Down-Spring_Index		; E
-		dc.w Spring_AniDown-Spring_Index	; 10
-		dc.w Spring_ResetDown-Spring_Index	; 12
+Spring_Index:
+		dc.w	Spring_Main-Spring_Index	; 0
+		dc.w	Spring_Up-Spring_Index		; 2
+		dc.w	Spring_AniUp-Spring_Index	; 4
+		dc.w	Spring_ResetUp-Spring_Index	; 6
+		dc.w	Spring_LR-Spring_Index		; 8
+		dc.w	Spring_AniLR-Spring_Index	; A
+		dc.w	Spring_ResetLR-Spring_Index	; C
+		dc.w	Spring_Down-Spring_Index	; E
+		dc.w	Spring_AniDown-Spring_Index	; 10
+		dc.w	Spring_ResetDown-Spring_Index	; 12
 
 spring_pow:	equ objoff_30		; power of current spring
 ; ===========================================================================

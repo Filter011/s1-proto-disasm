@@ -57,7 +57,7 @@ Moto_Main:	; Routine 0
 ; ===========================================================================
 
 Moto_Action:	; Routine 2
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	ob2ndRout(a0),d0			; get secondary routine counter
 		move.w	Moto_ActIndex(pc,d0.w),d1		; find current secondary index
 		jsr	Moto_ActIndex(pc,d1.w)			; jump there and return here

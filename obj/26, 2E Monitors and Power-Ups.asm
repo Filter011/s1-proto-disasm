@@ -160,7 +160,7 @@ Mon_Display:	; Routine 8
 		; the same frame or else cause a null-pointer dereference.
 		bsr.w	DisplaySprite				; display monitor
 		out_of_range.w	DeleteObject			; check if monitor has gone offscreen and delete it if so
-		rts						; return
+		rts
 	endif
 ; ===========================================================================
 

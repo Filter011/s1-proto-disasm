@@ -9,11 +9,12 @@ BasicPlatform:
 		move.w	Plat_Index(pc,d0.w),d1
 		jmp	Plat_Index(pc,d1.w)
 ; ===========================================================================
-Plat_Index:	dc.w Plat_Main-Plat_Index	; 0
-		dc.w Plat_Solid-Plat_Index	; 2
-		dc.w Plat_StoodOn-Plat_Index	; 4
-		dc.w Plat_Delete-Plat_Index	; 6
-		dc.w Plat_Action-Plat_Index	; 8
+Plat_Index:
+		dc.w	Plat_Main-Plat_Index	; 0
+		dc.w	Plat_Solid-Plat_Index	; 2
+		dc.w	Plat_StoodOn-Plat_Index	; 4
+		dc.w	Plat_Delete-Plat_Index	; 6
+		dc.w	Plat_Action-Plat_Index	; 8
 
 plat_rawY:	equ objoff_2C	; raw Y-positon (without nudge Y-offset)
 plat_origX:	equ objoff_32	; initial X-position
@@ -283,7 +284,7 @@ Plat_RiseOnSwitch:
 		bne.s	.wait					; if yes, branch
 
 		lea	(f_switch).w,a2				; load switch statuses
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obSubtype(a0),d0			; get platform subtype
 		lsr.w	#4,d0					; only read upper digit (for SYZ1's platform, this is 8)
 		tst.b	(a2,d0.w)				; has corresponding switch been pressed?

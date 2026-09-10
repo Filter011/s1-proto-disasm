@@ -152,7 +152,7 @@ Spikes_Type0:	; static
 
 Spikes_Type1:	; moving up/down
 		bsr.w	Spikes_WaitAndMove			; delay or update position delta
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	spikes_move_pos(a0),d0			; read only upper byte of position delta
 		add.w	spikes_origY(a0),d0			; add initial Y-position
 		move.w	d0,obY(a0)				; set new Y-position to move the spikes vertically
@@ -161,7 +161,7 @@ Spikes_Type1:	; moving up/down
 
 Spikes_Type2:	; moving left/right
 		bsr.w	Spikes_WaitAndMove			; delay or update position delta
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	spikes_move_pos(a0),d0			; read only upper byte of position delta
 		add.w	spikes_origX(a0),d0			; add initial X-position
 		move.w	d0,obX(a0)				; set new X-position to move the spikes horizontally

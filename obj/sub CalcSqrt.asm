@@ -29,7 +29,7 @@ CalcSqrt:
 
 		lsr.w	#1,d0					; keep result in the lower 8 bits
 		movem.l	(sp)+,d1-d2				; restore register data
-		rts						; return
+		rts
 ; ---------------------------------------------------------------------------
 
 .incrementRoot:
@@ -38,5 +38,5 @@ CalcSqrt:
 
 		lsr.w	#1,d0					; keep result in the lower 8 bits
 		movem.l	(sp)+,d1-d2				; restore register data
-		rts						; return
+		rts
 ; End of function CalcSqrt

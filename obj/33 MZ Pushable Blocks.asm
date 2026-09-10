@@ -34,7 +34,7 @@ PushB_Main:	; Routine 0
 		move.b	#sprite_cam_field,obRender(a0)		; set to playfield-positioned mode
 		move.b	#3,obPriority(a0)			; set sprite priority
 
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obSubtype(a0),d0			; get subtype (0 = 1x1 block // 1 = 4x1 block)
 		add.w	d0,d0					; double for word-based indexing
 		andi.w	#$E,d0					; limit to sane values (kinda)
@@ -48,7 +48,7 @@ PushB_Main:	; Routine 0
 
 	.chkgone:
 		lea	(v_objstate).w,a2			; load respawn table
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obRespawnNo(a0),d0			; get respawn index
 		beq.s	PushB_Action				; if it doesn't have one, branch
 		bclr	#7,2(a2,d0.w)				; clear respawn block flag
@@ -57,7 +57,7 @@ PushB_Main:	; Routine 0
 ; ---------------------------------------------------------------------------
 
 PushB_Action:	; Routine 2
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	obActWid(a0),d1				; use sprite display width as solidity width
 		addi.w	#sonic_solid_width,d1			; add Sonic's solid width
 		move.w	#32/2,d2				; set block's solid height (initial)
@@ -93,7 +93,7 @@ PushB_Display:
 
 PushB_ChkWithinOrigin:
 		lea	(v_objstate).w,a2			; load respawn table
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obRespawnNo(a0),d0			; get respawn table index
 		beq.s	.delete					; if it doesn't have one, branch
 		bclr	#0,2(a2,d0.w)				; allow block to respawn
@@ -144,7 +144,7 @@ PushB_OnLava_CheckWall:
 		bmi.s	.checkWallLeft				; if it's moving to the left, branch
 
 	.checkWallRight:
-		moveq	#0,d3					; clear d3
+		moveq	#0,d3
 		move.b	obActWid(a0),d3				; use sprite display width as solidity width
 		bsr.w	ObjHitWallRight				; get distance to right wall
 		tst.w	d1					; has block touched a wall to the right?
@@ -152,7 +152,7 @@ PushB_OnLava_CheckWall:
 		bra.s	PushB_LavaPlatform			; otherwise, keep normal platform behavior
 
 	.checkWallLeft:
-		moveq	#0,d3					; clear d3
+		moveq	#0,d3
 		move.b	obActWid(a0),d3				; use sprite display width as solidity width
 		not.w	d3					; invert width for leftside distance check
 		bsr.w	ObjHitWallLeft				; get distance to left wall
@@ -173,7 +173,7 @@ PushB_OnLava_CheckWall:
 ; ---------------------------------------------------------------------------
 
 PushB_LavaPlatform:
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	obActWid(a0),d1				; use sprite display width as solidity width
 		addi.w	#sonic_solid_width,d1			; add Sonic's solid width
 		move.w	#32/2,d2				; set block's solid height (initial)
@@ -216,7 +216,7 @@ PushB_SpawnLavaGeysers:
 		beq.s	.spawnGeyser				; if yes, spawn second geyser
 		cmpi.w	#$BA0,obX(a0)				; has block moved to $BA0 on X-axis?
 		beq.s	.spawnGeyser				; if yes, spawn second geyser
-		rts						; return
+		rts
 ; ---------------------------------------------------------------------------
 
 	.geysersMZ3:
@@ -230,7 +230,7 @@ PushB_SpawnLavaGeysers:
 		beq.s	.spawnGeyser				; if yes, spawn first geyser
 
 	.return:
-		rts						; return
+		rts
 ; ---------------------------------------------------------------------------
 
 .spawnGeyser:
@@ -244,7 +244,7 @@ PushB_SpawnLavaGeysers:
 		move.l	a0,gmake_parent(a1)			; remember parent block object for geyser
 
 	.fail:
-		rts						; return
+		rts
 ; End of function PushB_SpawnLavaGeysers
 
 
@@ -277,7 +277,7 @@ PushB_SolidAction:
 		btst	#3,obStatus(a1)				; check if Sonic is still on block
 		bne.s	.moveSonicWithBlock			; if yes, branch
 		clr.b	ob2ndRout(a0)				; clear platform flag
-		rts						; return
+		rts
 
 	.moveSonicWithBlock:
 		move.w	d4,d2					; set object's X-position as input for MvSonicOnPtfm
@@ -311,7 +311,7 @@ PushB_SolidAction:
 		clr.w	obSubpixelY(a0)				; clear Y-subpixel position (needed for sinking in lava)
 
 	.return:
-		rts						; return
+		rts
 ; ---------------------------------------------------------------------------
 
 .snapToLedge:	; ob2ndRout = 6
@@ -324,7 +324,7 @@ PushB_SolidAction:
 		move.w	obVelX(a0),pblock_lavaspeed(a0)		; remember current X-velocity in case we land on lava (+-$400)
 		clr.w	obVelX(a0)				; stop block moving horizontally
 		subq.b	#2,ob2ndRout(a0)			; set to "falling" state
-		rts						; return
+		rts
 ; ===========================================================================
 
 PushB_SolidAction_NotOnPlatform:
@@ -342,7 +342,7 @@ PushB_SolidAction_NotOnPlatform:
 		bne.w	PushB_Return				; if not, branch
 
 		move.w	d0,-(sp)				; backup X-distance to block
-		moveq	#0,d3					; clear d3
+		moveq	#0,d3
 		move.b	obActWid(a0),d3				; use sprite display width as solidity width
 		bsr.w	ObjHitWallRight				; get distance to right wall
 		move.w	(sp)+,d0				; restore X-distance to block
@@ -359,7 +359,7 @@ PushB_SolidAction_NotOnPlatform:
 		beq.s	PushB_Return				; if not, branch
 
 		move.w	d0,-(sp)				; backup X-distance to block
-		moveq	#0,d3					; clear d3
+		moveq	#0,d3
 		move.b	obActWid(a0),d3				; use sprite display width as solidity width
 		not.w	d3					; invert width for leftside distance check
 		bsr.w	ObjHitWallLeft				; get distance to left wall
@@ -394,14 +394,14 @@ PushB_SolidAction_NotOnPlatform:
 		neg.w	obVelX(a0)				; move block to the left instead
 	.setToDrop:
 		move.b	#6,ob2ndRout(a0)			; snap block to ledge before falling down
-		bra.s	PushB_Return				; return
+		bra.s	PushB_Return
 ; ---------------------------------------------------------------------------
 
 	.alignToFloor:
 		add.w	d1,obY(a0)				; snap block vertically to floor
 
 PushB_Return:
-		rts						; return
+		rts
 
 ; ===========================================================================
 

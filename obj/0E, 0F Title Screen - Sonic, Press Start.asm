@@ -39,7 +39,7 @@ TSon_Delay:	; Routine 2
 		addq.b	#2,obRoutine(a0)			; advance to TSon_Move
 		bra.w	DisplaySprite				; start displaying Sonic's sprite
 	.wait:
-		rts						; return
+		rts
 ; ===========================================================================
 
 TSon_Move:	; Routine 4

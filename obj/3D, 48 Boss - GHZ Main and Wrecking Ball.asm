@@ -171,7 +171,7 @@ BGHZ_MakeBall:
 
 ; loc_B1F2:
 .skip:
-		move.w	#120-1,BGHZ_BossGenericTimer(a0) 		; set a timer to 2 seconds (120 frames) after ball logic is complete
+		move.w	#120-1,BGHZ_BossGenericTimer(a0) 	; set a timer to 2 seconds (120 frames) after ball logic is complete
 
 ; loc_B1F8:
 .return:

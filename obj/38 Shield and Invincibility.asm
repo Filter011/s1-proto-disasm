@@ -27,12 +27,12 @@ Shi_Main:	; Routine 0
 		tst.b	obAnim(a0)				; is object a shield?
 		bne.s	.stars					; if not, branch
 		move.w	#ArtTile_Shield,obGfx(a0)		; shield-specific art tile
-		rts						; return
+		rts
 
 	.stars:
 		addq.b	#2,obRoutine(a0)			; advance to Shi_Stars
 		move.w	#ArtTile_Invincibility,obGfx(a0)	; stars-specific art tile
-		rts						; return
+		rts
 ; ===========================================================================
 
 Shi_Shield:	; Routine 2

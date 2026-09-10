@@ -12,7 +12,7 @@
 
 ReactToItem:
 		nop						; useless nop (probably so an rts could easily be inserted here)
-		moveq	#0,d5					; clear d5
+		moveq	#0,d5
 		move.b	obHeight(a0),d5				; load Sonic's height
 		subq.b	#3,d5					; shrink by 3px
 		move.w	obX(a0),d2				; load Sonic's x-axis position

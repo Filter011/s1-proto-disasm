@@ -42,7 +42,7 @@ LGrass_Main:	; Routine 0
 		move.w	obY(a0),lgrass_origY(a0)		; remember initial Y-position
 		move.w	obX(a0),lgrass_origX(a0)		; remember initial X-position
 
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obSubtype(a0),d0			; get platform subtype
 		lsr.w	#2,d0					; read only upper digit, multiplied by 4 bytes per entry
 		andi.w	#$1C,d0					; limit to shifted, upper digit
@@ -65,7 +65,7 @@ LGrass_Action:	; Routine 2
 		beq.s	LGrass_Solid				; if not, branch
 
 		; Check if Sonic is still in platform
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	obActWid(a0),d1				; use sprite display width as platform width
 		addi.w	#sonic_solid_width,d1			; add Sonic's own solidity width
 		bsr.w	ExitPlatform				; allow Sonic exiting the platform
@@ -77,7 +77,7 @@ LGrass_Action:	; Routine 2
 ; ===========================================================================
 
 LGrass_Slope:	; Sonic is still on platform, align with slope data
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	obActWid(a0),d1				; use sprite display width as platform width
 		addi.w	#sonic_solid_width,d1			; add Sonic's own solidity width
 		movea.l	lgrass_coldata(a0),a2			; load pointer to slope collision data
@@ -88,7 +88,7 @@ LGrass_Slope:	; Sonic is still on platform, align with slope data
 ; ===========================================================================
 
 LGrass_Solid:	; Sonic is NOT on platform
-		moveq	#0,d1					; clear d1
+		moveq	#0,d1
 		move.b	obActWid(a0),d1				; use sprite display width as platform width
 		addi.w	#sonic_solid_width,d1			; add Sonic's own solidity width
 		move.w	#64/2,d2				; platform height (symmetrical/asymmetrical)
@@ -223,13 +223,13 @@ LGrass_Burnable:
 		bsr.s	LGrass_AddChildToList			; add child fire object to list of children objects
 
 	.updateflamesForNudge:
-		moveq	#0,d2					; clear d2
+		moveq	#0,d2
 		lea	lgrass_flames(a0),a2			; load list of child objects
 		move.b	(a2)+,d2				; get current child count
 		subq.b	#1,d2					; decrement for dbf
 		bcs.s	.return					; if it underflowed, no children are in the list yet
 	.loopUpdateForNudge:
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	(a2)+,d0				; get next RAM index for child object
 		lsl.w	#object_size_bits,d0			; multiply by $40 (object_size)
 		addi.w	#v_objspace&$FFFF,d0			; add base object RAM offset
@@ -253,7 +253,7 @@ LGrass_Burnable:
 ; sub_B09C:
 LGrass_AddChildToList:
 		lea	lgrass_flames(a2),a2			; load list of child objects
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	(a2),d0					; get current child count
 		addq.b	#1,(a2)					; increment child counter
 		lea	1(a2,d0.w),a2				; go to end of list

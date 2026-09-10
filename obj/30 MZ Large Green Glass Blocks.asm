@@ -201,7 +201,7 @@ Glass_Type2_DownUp:
 		bra.w	Glass_Type12_MoveSheen			; oscillate pillar and sheen Y-positions
 ; ===========================================================================
 
-; Subtype 3 - moves down when Sonic jumps on it repeatedly (unused prototype leftover)
+; Subtype 3 - moves down when Sonic jumps on it repeatedly
 Glass_Type3_Stomp:
 		btst	#3,obSubtype(a0)			; is this the sheen object?
 		beq.s	.checkSonicStomp			; if not, branch
@@ -270,7 +270,7 @@ Glass_ChkSwitch:
 		bne.s	.movePillarDown				; if yes, branch
 
 		lea	(f_switch).w,a2				; load switch status array
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	obSubtype(a0),d0			; load object subtype number
 		lsr.w	#4,d0					; read only the upper digit
 		tst.b	(a2,d0.w)				; has switch matching upper subtype digit been pressed?

@@ -231,7 +231,7 @@ Bri_Bend:
 		moveq	#0,d0
 		move.b	bridge_children(a0),d0			; get bridge log count
 		lsl.w	#4,d0					; multiply by $10 bytes per data row
-		moveq	#0,d3					; clear d3
+		moveq	#0,d3
 		move.b	bridge_currentlog(a0),d3		; get index of log Sonic is currently standing on
 		move.w	d3,d2					; d2 = number of logs to the left of Sonic (dbf count)
 		add.w	d0,d3					; d3 = index in Bri_Data_Y_Max for current log

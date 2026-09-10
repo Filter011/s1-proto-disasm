@@ -136,7 +136,7 @@ Buzz_Action_Move:
 ; ===========================================================================
 
 Buzz_Delete:	; Routine 4 (unreachable, deletion is handled elsewhere)
-		bsr.w	DeleteObject				; delete object
+		bsr.w	DeleteObject
 		rts
 
 

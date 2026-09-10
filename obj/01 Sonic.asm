@@ -1859,7 +1859,7 @@ Sonic_Animate:
 
 ; SAnim_Delay:
 .delay:
-		rts						; return
+		rts
 ; ===========================================================================
 
 ; SAnim_End_FF:

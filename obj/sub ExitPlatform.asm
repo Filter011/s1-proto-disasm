@@ -34,5 +34,5 @@ ExitPlatform2:	; input width is already in d2
 		bclr	#3,obStatus(a0)				; clear platform's stood-on flag
 
 	.return:
-		rts						; return
+		rts
 ; End of function ExitPlatform

@@ -118,16 +118,16 @@ Sball_Twirl:
 		move.w	sball_origX(a0),d3			; get initial X-position
 		lea	sball_children(a0),a2			; load child RAM index array
 
-		moveq	#0,d6					; clear d6
+		moveq	#0,d6
 		move.b	(a2)+,d6				; get number of loaded child objects
 	.loop:
-		moveq	#0,d4					; clear d4
+		moveq	#0,d4
 		move.b	(a2)+,d4				; get next child RAM index from array
 		lsl.w	#object_size_bits,d4			; multiply by $40 (object_size)
 		addi.l	#v_objspace&$FFFFFF,d4			; add base object RAM location
 		movea.l	d4,a1					; a1 = address of current child object in RAM
 
-		moveq	#0,d4					; clear d4 again
+		moveq	#0,d4
 		move.b	sball_radius(a1),d4			; get radius for child object
 		move.l	d4,d5					; copy radius for later
 		muls.w	d0,d4					; multiply radius by angle sine
@@ -140,7 +140,7 @@ Sball_Twirl:
 		move.w	d5,obX(a1)				; update X-position for twirling
 		dbf	d6,.loop				; loop for all child objects
 
-		rts						; return
+		rts
 ; End of function Sball_Twirl
 ; ===========================================================================
 
@@ -150,11 +150,11 @@ SBall_ChkDel:
 ; ---------------------------------------------------------------------------
 
 	.delete:
-		moveq	#0,d2					; clear d2
+		moveq	#0,d2
 		lea	sball_children(a0),a2			; load child RAM index array
 		move.b	(a2)+,d2				; get number of loaded child objects
 	.deleteloop:
-		moveq	#0,d0					; clear d0
+		moveq	#0,d0
 		move.b	(a2)+,d0				; get next child RAM index from array
 		lsl.w	#object_size_bits,d0			; multiply by $40 (object_size)
 		addi.l	#v_objspace&$FFFFFF,d0			; add base object RAM location
@@ -162,7 +162,7 @@ SBall_ChkDel:
 		bsr.w	DeleteChild				; delete the child object
 		dbf	d2,.deleteloop				; loop for all children in chain
 
-		rts						; return
+		rts
 ; ===========================================================================
 
 ; SBall_Display:

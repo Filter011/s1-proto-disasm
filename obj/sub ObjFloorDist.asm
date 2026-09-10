@@ -36,5 +36,5 @@ ObjFloorDist2:	; X-position is already in d3
 		move.b	#0,d3					; snap to flat floor
 
 	.return:
-		rts						; return
+		rts
 ; End of function ObjFloorDist
