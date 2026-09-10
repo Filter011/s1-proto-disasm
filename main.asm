@@ -2480,7 +2480,7 @@ DebugPosLoadArt:
 
 	.writeText:
 		move.w	(a0)+,(vdp_data_port).l			; write to VDP data port
-		dbf	d1,.writeText
+		dbf	d1,.writeText				; loop for number of tiles to write
 		rts
 ; ===========================================================================
 
@@ -2490,16 +2490,16 @@ DebugPosLoadArt:
 		ror.w	#1,d0					; rotate right by 1 in word
 		lsr.b	#3,d0					; divide byte by 8
 		rol.w	#1,d0					; rotate left by 1 in word
-		move.b	.1bpp(pc,d0.w),d2			; get table and store in d2
+		move.b	.1bpp(pc,d0.w),d2			; get table based on d0 and store in d2
 		lsl.w	#8,d2					; shift up a byte
 		moveq	#0,d0
 		move.b	(a0)+,d0				; get next byte from Art_Text
 		ror.w	#1,d0					; rotate right by 1 in word
 		lsr.b	#3,d0					; divide byte by 8
 		rol.w	#1,d0					; rotate left by 1 in word
-		move.b	.1bpp(pc,d0.w),d2			; get table and store in d2
+		move.b	.1bpp(pc,d0.w),d2			; get table based on d0 and store in d2
 		move.w	d2,(vdp_data_port).l			; write to VDP data port
-		dbf	d1,.writeText
+		dbf	d1,.writeText				; loop for number of tiles to write
 		rts
 ; ===========================================================================
 
