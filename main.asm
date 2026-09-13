@@ -551,7 +551,7 @@ ErrorWaitForC:
 ; (formerly "menutext.bin")
 ; ---------------------------------------------------------------------------
 
-Art_Text:	bincludeEndMarker	"artunc/Level Select & Debug Text.bin"
+Art_Text:	bincludeEndMarker	"artunc/Level Select & Debug Text.unc"
 
 
 ; ===========================================================================
@@ -2423,9 +2423,9 @@ sub_3178:
 		rts
 ; ===========================================================================
 
-Anim256Unk1:	bincludeEndMarker	"level/map256/Anim Unknown 1.bin"
+Anim256Unk1:	bincludeEndMarker	"level/map256/Anim Unknown 1.unc"
 
-Anim256Unk2:	bincludeEndMarker	"level/map256/Anim Unknown 2.bin"
+Anim256Unk2:	bincludeEndMarker	"level/map256/Anim Unknown 2.unc"
 
 ; ===========================================================================
 
@@ -2461,9 +2461,9 @@ LoadAnimatedBlocks:
 		rts
 ; ===========================================================================
 
-Anim16GHZ:	bincludeEndMarker	"level/map16/Anim GHZ.bin"
+Anim16GHZ:	bincludeEndMarker	"level/map16/Anim GHZ.unc"
 
-Anim16MZ:	bincludeEndMarker	"level/map16/Anim MZ.bin"
+Anim16MZ:	bincludeEndMarker	"level/map16/Anim MZ.unc"
 
 ; ===========================================================================
 
@@ -2906,9 +2906,9 @@ Map_SS_Goal_R:	include	"_maps/SS DOWN Block.asm"
 		include	"obj/sub AddPoints.asm"
 		include	"_include/HUD Update.asm"
 
-Art_Hud:	binclude	"artunc/HUD Numbers.bin" ; 8x16 pixel numbers on HUD
+Art_Hud:	binclude	"artunc/HUD Numbers.unc" ; 8x16 pixel numbers on HUD
 		even
-Art_LivesNums:	binclude	"artunc/Lives Counter Numbers.bin" ; 8x8 pixel numbers on lives counter
+Art_LivesNums:	binclude	"artunc/Lives Counter Numbers.unc" ; 8x8 pixel numbers on lives counter
 		even
 
 
@@ -2954,7 +2954,7 @@ Eni_SegaLogo:	binclude	"tilemaps/Sega Logo.eni"
 ; ---------------------------------------------------------------------------
 ; Compressed graphics and uncompressed mappings - Title screen
 ; ---------------------------------------------------------------------------
-Unc_Title:	binclude	"tilemaps/Title Screen.bin" ; title screen foreground (mappings)
+Unc_Title:	binclude	"tilemaps/Title Screen.unc" ; title screen foreground (mappings)
 		even
 Nem_TitleFg:	binclude	"artnem/Title Screen Foreground.nem"
 		even
@@ -2976,7 +2976,7 @@ Map_Sonic:	include	"_maps/Sonic.asm"
 
 SonicDynPLC:	include	"_maps/Sonic - Dynamic Gfx Script.asm"
 
-Art_Sonic:	binclude	"artunc/Sonic.bin"
+Art_Sonic:	binclude	"artunc/Sonic.unc"
 		even
 
 ; ---------------------------------------------------------------------------
@@ -3172,7 +3172,7 @@ Nem_Squirrel:	binclude	"artnem/Animal Squirrel.nem"
 		align	$1000
 	endif
 
-Blk16_GHZ:	binclude	"level/map16/GHZ.bin"
+Blk16_GHZ:	binclude	"level/map16/GHZ.unc"
 		even
 Nem_GHZ_1st:	binclude	"artnem/8x8 - GHZ1.nem"
 		even
@@ -3181,14 +3181,14 @@ Nem_GHZ_2nd:	binclude	"artnem/8x8 - GHZ2.nem"
 Blk256_GHZ:	binclude	"level/map256/GHZ.kos"
 		even
 
-Blk16_LZ:	binclude	"level/map16/LZ.bin"
+Blk16_LZ:	binclude	"level/map16/LZ.unc"
 		even
 Nem_LZ:		binclude	"artnem/8x8 - LZ.nem"
 		even
 Blk256_LZ:	binclude	"level/map256/LZ.kos"
 		even
 
-Blk16_MZ:	binclude	"level/map16/MZ.bin"
+Blk16_MZ:	binclude	"level/map16/MZ.unc"
 		even
 Nem_MZ:		binclude	"artnem/8x8 - MZ.nem"
 		even
@@ -3208,21 +3208,21 @@ Blk256_MZ:	binclude	"level/map256/MZ.kos"
 		binclude	"unknown/3DB78.dat"
 		even
 
-Blk16_SLZ:	binclude	"level/map16/SLZ.bin"
+Blk16_SLZ:	binclude	"level/map16/SLZ.unc"
 		even
 Nem_SLZ:	binclude	"artnem/8x8 - SLZ.nem"
 		even
 Blk256_SLZ:	binclude	"level/map256/SLZ.kos"
 		even
 
-Blk16_SZ:	binclude	"level/map16/SZ.bin"
+Blk16_SZ:	binclude	"level/map16/SZ.unc"
 		even
 Nem_SZ:		binclude	"artnem/8x8 - SZ.nem"
 		even
 Blk256_SZ:	binclude	"level/map256/SZ.kos"
 		even
 
-Blk16_CWZ:	binclude	"level/map16/CWZ.bin"
+Blk16_CWZ:	binclude	"level/map16/CWZ.unc"
 		even
 Nem_CWZ:	binclude	"artnem/8x8 - CWZ.nem"
 		even
@@ -3346,25 +3346,24 @@ Col_CWZ:	binclude	"collide/CWZ.bin"
 ; ---------------------------------------------------------------------------
 ; Special Stage layout
 ; ---------------------------------------------------------------------------
-SS_1:		binclude	"sslayout/1.bin"
-SS_1_End:	even
+SS_1:		bincludeEndMarker	"sslayout/1.unc"
 
 ; ---------------------------------------------------------------------------
 ; Animated uncompressed graphics
 ; ---------------------------------------------------------------------------
-Art_GhzWater:	binclude	"artunc/GHZ Waterfall.bin"
+Art_GhzWater:	binclude	"artunc/GHZ Waterfall.unc"
 		even
-Art_GhzFlower1:	binclude	"artunc/GHZ Flower Large.bin"
+Art_GhzFlower1:	binclude	"artunc/GHZ Flower Large.unc"
 		even
-Art_GhzFlower2:	binclude	"artunc/GHZ Flower Small.bin"
+Art_GhzFlower2:	binclude	"artunc/GHZ Flower Small.unc"
 		even
-Art_MzLava1:	binclude	"artunc/MZ Lava Surface.bin"
+Art_MzLava1:	binclude	"artunc/MZ Lava Surface.unc"
 		even
-Art_MzLava2:	binclude	"artunc/MZ Lava.bin"
+Art_MzLava2:	binclude	"artunc/MZ Lava.unc"
 		even
-Art_MzSaturns:	binclude	"artunc/MZ Saturns.bin"
+Art_MzSaturns:	binclude	"artunc/MZ Saturns.unc"
 		even
-Art_MzTorch:	binclude	"artunc/MZ Background Torch.bin"
+Art_MzTorch:	binclude	"artunc/MZ Background Torch.unc"
 		even
 
 ; ---------------------------------------------------------------------------
