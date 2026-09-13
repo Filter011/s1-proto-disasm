@@ -22,9 +22,9 @@ fb_switch:	equ objoff_3C		; switch ID that triggers action behavior
 
 FBlock_Var:	;     width, height
 		dc.b   32/2, 32/2	; $0x/$8x - SYZ 1x1 block
-		dc.b   64/2, 64/2	; $1x/$9x - SYZ 2x2 square up/down blocks in SYZ (the annoying ones)
+		dc.b   64/2, 64/2	; $1x/$9x - SYZ 2x2 square up/down blocks in SZ (the annoying ones)
 		dc.b   32/2, 64/2	; $2x/$Ax - SYZ 1x2 door
-		dc.b   64/2, 52/2	; $3x/$Bx - SYZ special block moving right in SYZ3
+		dc.b   64/2, 52/2	; $3x/$Bx - SYZ special block moving right in SZ3
 		dc.b   32/2, 78/2	; $4x/$Cx - (unused)
 		dc.b   32/2, 32/2	; $5x/$Dx - SLZ rotating stairway block
 ; ===========================================================================

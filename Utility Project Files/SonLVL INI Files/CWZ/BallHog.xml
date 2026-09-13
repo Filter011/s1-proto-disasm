@@ -3,11 +3,11 @@
   <Images>
     <ImageFromMappings id="ballhog">
       <ArtFile filename="../../artnem/Enemy Ball Hog.nem"/>
-      <MapFile type="ASM" filename="../../_maps/Ball Hog.asm" frame="0" startpal="1" />
+      <MapFile type="ASM" filename="../../_maps/Ball Hog.asm" frame="0" startpal="1"/>
     </ImageFromMappings>
   </Images>
   <Properties>
-    <BitsProperty name="Delay" displayname="Explosion Delay (Seconds)" type="int" startbit="0" length="8" />
+    <BitsProperty name="Delay" displayname="Explosion Delay (Seconds)" type="int" startbit="0" length="8"/>
   </Properties>
   <Display>
     <DisplayOption>

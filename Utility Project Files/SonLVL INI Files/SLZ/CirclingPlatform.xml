@@ -3,22 +3,22 @@
   <Images>
     <ImageFromMappings id="img1">
       <ArtFile filename="../../artnem/SLZ Platforms.nem"/>
-      <MapFile type="ASM" filename="../../_maps/SLZ Circling Platform.asm" frame="0" startpal="2" />
+      <MapFile type="ASM" filename="../../_maps/SLZ Circling Platform.asm" frame="0" startpal="2"/>
     </ImageFromMappings>
   </Images>
   <Properties>
-    <BitsProperty name="Rotation" type="PlatformRotation" startbit="0" length="1" />
-    <BitsProperty name="Delay" displayname="Ahead 90°" type="bool" startbit="1" length="1" />
+    <BitsProperty name="Rotation" type="PlatformRotation" startbit="0" length="1"/>
+    <BitsProperty name="Delay" displayname="Ahead 90°" type="bool" startbit="1" length="1"/>
   </Properties>
   <Enums>
     <Enum name="PlatformRotation">
-      <EnumMember name="Counterclockwise" />
-      <EnumMember name="Clockwise" />
+      <EnumMember name="Counterclockwise"/>
+      <EnumMember name="Clockwise"/>
     </Enum>
   </Enums>
   <Display>
     <DisplayOption>
-      <ImageRef image="img1" />
+      <ImageRef image="img1"/>
     </DisplayOption>
   </Display>
 </ObjDef>

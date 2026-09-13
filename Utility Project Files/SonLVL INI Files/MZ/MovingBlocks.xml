@@ -11,39 +11,39 @@
     </ImageFromMappings>
   </Images>
   <Properties>
-    <BitsProperty name="Sprite" type="MZBlockPlatformSprite" startbit="4" length="4" />
-    <BitsProperty name="Behaviour" type="MZBlockPlatformBehaviour" startbit="0" length="4" />
+    <BitsProperty name="Sprite" type="MZBlockPlatformSprite" startbit="4" length="4"/>
+    <BitsProperty name="Behaviour" type="MZBlockPlatformBehaviour" startbit="0" length="4"/>
   </Properties>
   <Enums>
     <Enum name="MZBlockPlatformSprite">
-      <EnumMember name="Single Block" />
-      <EnumMember name="Two Blocks" />
-      <EnumMember name="Invalid 1" />
-      <EnumMember name="Invalid 2" />
-      <EnumMember name="Three Blocks" />
+      <EnumMember name="Single Block"/>
+      <EnumMember name="Two Blocks"/>
+      <EnumMember name="Invalid 1"/>
+      <EnumMember name="Invalid 2"/>
+      <EnumMember name="Three Blocks"/>
     </Enum>
     <Enum name="MZBlockPlatformBehaviour">
-      <EnumMember name="Stationary" />
-      <EnumMember name="Move left and right" />
-      <EnumMember name="When stood on, go right and stop at wall" />
-      <EnumMember name="Go right and stop at wall (not meant to be used)" />
-      <EnumMember name="When stood on, go right and fall at wall" />
-      <EnumMember name="Go right and fall at wall (not meant to be used)" />
-      <EnumMember name="Fall and land on floor (not meant to be used)" />
-      <EnumMember name="Don't appear until a switch (ID 02) is pressed, then, when stood on, go right and fall at wall" />
-      <EnumMember name="Move up and down" />
-      <EnumMember name="When stood on, retract into wall" />
-      <EnumMember name="Retract into wall (not meant to be used)" />
+      <EnumMember name="Stationary"/>
+      <EnumMember name="Move left and right"/>
+      <EnumMember name="When stood on, go right and stop at wall"/>
+      <EnumMember name="Go right and stop at wall (not meant to be used)"/>
+      <EnumMember name="When stood on, go right and fall at wall"/>
+      <EnumMember name="Go right and fall at wall (not meant to be used)"/>
+      <EnumMember name="Fall and land on floor (not meant to be used)"/>
+      <EnumMember name="Don't appear until a switch (ID 02) is pressed, then, when stood on, go right and fall at wall"/>
+      <EnumMember name="Move up and down"/>
+      <EnumMember name="When stood on, retract into wall"/>
+      <EnumMember name="Retract into wall (not meant to be used)"/>
     </Enum>
   </Enums>
   <Display>
     <DisplayOption>
-      <Condition property="Sprite" value="Single Block" />
-      <ImageRef image="frame0" />
+      <Condition property="Sprite" value="Single Block"/>
+      <ImageRef image="frame0"/>
     </DisplayOption>
     <DisplayOption>
-      <Condition property="Sprite" value="Two Blocks" />
-      <ImageRef image="frame1" />
+      <Condition property="Sprite" value="Two Blocks"/>
+      <ImageRef image="frame1"/>
     </DisplayOption>
   </Display>
 </ObjDef>

@@ -53,37 +53,37 @@
     <Subtype id="2D" name="Column - (R) Combust" image="img3"/>
   </Subtypes>
   <Properties>
-    <BitsProperty name="Behaviour" type="BehaviourVal" startbit="0" length="3" />
-    <BitsProperty name="Movement" displayname="Reverse movement" type="bool" startbit="3" length="1" />
-    <BitsProperty name="Sprite" type="SpriteFrame" startbit="4" length="2" />
+    <BitsProperty name="Behaviour" type="BehaviourVal" startbit="0" length="3"/>
+    <BitsProperty name="Movement" displayname="Reverse movement" type="bool" startbit="3" length="1"/>
+    <BitsProperty name="Sprite" type="SpriteFrame" startbit="4" length="2"/>
   </Properties>
   <Enums>
     <Enum name="BehaviourVal">
-      <EnumMember name="Stationary" />
-      <EnumMember name="Move (1)" />
-      <EnumMember name="Move (2)" />
-      <EnumMember name="Move (3)" />
-      <EnumMember name="Move (4)" />
-      <EnumMember name="Combust" />
+      <EnumMember name="Stationary"/>
+      <EnumMember name="Move (1)"/>
+      <EnumMember name="Move (2)"/>
+      <EnumMember name="Move (3)"/>
+      <EnumMember name="Move (4)"/>
+      <EnumMember name="Combust"/>
     </Enum>
     <Enum name="SpriteFrame">
-      <EnumMember name="Symmetrical" />
-      <EnumMember name="Asymmetrical" />
-      <EnumMember name="Column" />
+      <EnumMember name="Symmetrical"/>
+      <EnumMember name="Asymmetrical"/>
+      <EnumMember name="Column"/>
     </Enum>
   </Enums>
   <Display>
     <DisplayOption>
-      <Condition property="Sprite" value="Symmetrical" />
-      <ImageRef image="img1" />
+      <Condition property="Sprite" value="Symmetrical"/>
+      <ImageRef image="img1"/>
     </DisplayOption>
     <DisplayOption>
-      <Condition property="Sprite" value="Asymmetrical" />
-      <ImageRef image="img2" />
+      <Condition property="Sprite" value="Asymmetrical"/>
+      <ImageRef image="img2"/>
     </DisplayOption>
     <DisplayOption>
-      <Condition property="Sprite" value="Column" />
-      <ImageRef image="img3" />
+      <Condition property="Sprite" value="Column"/>
+      <ImageRef image="img3"/>
     </DisplayOption>
   </Display>
 </ObjDef>

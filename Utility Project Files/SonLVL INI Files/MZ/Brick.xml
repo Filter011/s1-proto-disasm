@@ -15,14 +15,14 @@
     <Subtype id="0A" name="Fall (reverse)" image="img1"/>
   </Subtypes>
   <Properties>
-    <BitsProperty name="Behaviour" type="BehaviourVal" startbit="0" length="2" />
-    <BitsProperty name="Movement" displayname="Reverse movement" type="bool" startbit="3" length="1" />
+    <BitsProperty name="Behaviour" type="BehaviourVal" startbit="0" length="2"/>
+    <BitsProperty name="Movement" displayname="Reverse movement" type="bool" startbit="3" length="1"/>
   </Properties>
   <Enums>
     <Enum name="BehaviourVal">
-      <EnumMember name="Stationary" />
-      <EnumMember name="Bob up and down" />
-      <EnumMember name="Bob and fall" />
+      <EnumMember name="Stationary"/>
+      <EnumMember name="Bob up and down"/>
+      <EnumMember name="Bob and fall"/>
     </Enum>
   </Enums>
 </ObjDef>

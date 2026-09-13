@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using SonicRetro.SonLVL.API;
 
-namespace S1ObjectDefinitions.SYZ
+namespace S1ObjectDefinitions.SZ
 {
 	class SpikeballChain : ObjectDefinition
 	{
