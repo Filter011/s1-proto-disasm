@@ -324,12 +324,13 @@ DACUpdateTrack:
 
 ; ===========================================================================
 ; Note: $8C-$8F are so slow you may want to skip them.
+timpaniLoopCounter function scale,dpcmLoopCounter(int(zDAC_Timpani.sample_rate*scale))
 
 DAC_sample_rate:
-		dc.b dpcmLoopCounter(8250)
-		dc.b dpcmLoopCounter(7550)
-		dc.b dpcmLoopCounter(6350)
-		dc.b dpcmLoopCounter(6250)
+		dc.b timpaniLoopCounter(1.30)
+		dc.b timpaniLoopCounter(1.17)
+		dc.b timpaniLoopCounter(0.99)
+		dc.b timpaniLoopCounter(0.97)
 		dc.b $FF, $FF, $FF, $FF
 		even
 ; ===========================================================================

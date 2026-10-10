@@ -261,12 +261,12 @@ Debug_ShowItem:
 ; Debug mode item lists
 ; ---------------------------------------------------------------------------
 DebugList:
-		dc.w .GHZ-DebugList
-		dc.w .LZ-DebugList
-		dc.w .MZ-DebugList
-		dc.w .SLZ-DebugList
-		dc.w .SZ-DebugList
-		dc.w .CWZ-DebugList
+		dc.w	.GHZ-DebugList
+		dc.w	.LZ-DebugList
+		dc.w	.MZ-DebugList
+		dc.w	.SLZ-DebugList
+		dc.w	.SZ-DebugList
+		dc.w	.CWZ-DebugList
 
 dbug:		macro map,object,subtype,frame,vram
 		dc.l map+(object<<24)

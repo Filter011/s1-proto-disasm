@@ -1,11 +1,16 @@
-s1built.bin
-s1built.prev.bin
-main.lst
-main.log
-main.p
 Utility Project Files/SonLVL INI Files/dllcache/*
 Utility Project Files/SonLVL INI Files/SonLVL.log
 
-# Hivebrains comment utility
-Comment.bat
-Comment.exe
+# Misc. compiler output.
+main.lst
+main.log
+main.p
+
+# Built ROMs.
+s1built.bin
+s1built.prev.bin
+
+# Automatically-generated DPCM data.
+sound/dac/dpcm/generated/*.inc
+sound/dac/dpcm/generated/*.dpcm
+sound/dac/dpcm/generated/hashes.lua

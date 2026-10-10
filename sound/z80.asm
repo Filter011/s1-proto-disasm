@@ -246,48 +246,40 @@ loc_153:
 
 ; ===========================================================================
 
-zPCMMetadata macro label,loopFlag,priority,loopLabel,sampleRate
-	dw	label				; Start
-	dw	label_End-label			; Length
+zPCMMetadata macro label,loopFlag,priority,loopLabel
+	dw	label					; Start
+	dw	label.size				; Length
 	if loopFlag
-		db	80h			; Loop Flag
+		db	80h				; Loop Flag
 	else
-		db	0			; Loop Flag
+		db	0				; Loop Flag
 	endif
 	if priority
-		db	80h			; Priority
+		db	80h				; Priority
 	else
-		db	0			; Priority
+		db	0				; Priority
 	endif
 	if loopLabel
-		dw	loopLabel		; Loop Start
-		dw	loopLabel_End-loopLabel	; Loop Length
+		dw	loopLabel			; Loop Start
+		dw	loopLabel_End-loopLabel		; Loop Length
 	else
 		ds	4
 	endif
-	db	0				; Padding
-	db	dpcmLoopCounter(sampleRate)	; Pitch
+	db	0					; Padding
+	db	dpcmLoopCounter(label.sample_rate)	; Pitch
 	endm
 
 ; DPCM metadata
 zPCM_Table:
-	zPCMMetadata zDAC_Kick,0,0,0,7750
-	zPCMMetadata zDAC_Snare,0,0,0,16500
+	zPCMMetadata zDAC_Kick,0,0,0
+	zPCMMetadata zDAC_Snare,0,0,0
 zTimpani_Pitch = $+zSampleRate
-	zPCMMetadata zDAC_Timpani,0,0,0,6450
+	zPCMMetadata zDAC_Timpani,0,0,0
 
 ; DPCM data
-zDAC_Kick:
-	binclude "dac/kick.dpcm"
-zDAC_Kick_End:
-
-zDAC_Snare:
-	binclude "dac/snare.dpcm"
-zDAC_Snare_End:
-
-zDAC_Timpani:
-	binclude "dac/timpani.dpcm"
-zDAC_Timpani_End:
+zDAC_Kick:	include "sound/dac/dpcm/generated/kick.inc"
+zDAC_Snare:	include "sound/dac/dpcm/generated/snare.inc"
+zDAC_Timpani:	include "sound/dac/dpcm/generated/timpani.inc"
 
 	if MOMPASS=2
 		if $ > 2000h

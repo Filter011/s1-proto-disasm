@@ -17,7 +17,7 @@
 
 SolidObject:
 		cmpi.b	#6,(v_player+obRoutine).w		; is Sonic dying?
-		bhs.w	.dead			; if yes, branch
+		bhs.w	.dead					; if yes, branch
 		tst.b	obSolid(a0)				; is Sonic standing on the object?
 		beq.w	Solid_ChkCollision			; if not, branch
 		move.w	d1,d2
