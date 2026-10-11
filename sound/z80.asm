@@ -285,7 +285,7 @@ zDAC_Timpani:	include "sound/dac/dpcm/generated/timpani.inc"
 		if $ > 2000h
 			fatal "The driver is too big	; the maximum size it can take is 2000h. It currently takes \{$}h bytes. You won't be able to use this thing."
 		else
-			message "Driver size: \{$}h bytes."
+			; message "Driver size: \{$}h bytes." ; Uncomment this line to print the driver size to the shell for every build.
 		endif
 	endif
 

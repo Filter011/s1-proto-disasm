@@ -1,4 +1,4 @@
--- get_os_name(), funtion to return current OS name and architecture
+-- get_os_name(), function to return current OS name and architecture
 -- Copyright Philippe Fremy 2017
 --
 -- This code is based on the following Gist from Soulik (https://gist.github.com/soulik)
@@ -16,7 +16,7 @@ function M.get_os_name()
     -- Arch possible values: x86, x86864, powerpc, arm, mips
     -- 
     -- On Windows, detection based on environment variable is limited
-    -- to what Windows is willing to tell through environement variables. In particular
+    -- to what Windows is willing to tell through environment variables. In particular
     -- 64bits is not always indicated so do not rely hardly on this value.
 
     local raw_os_name, raw_arch_name = '', ''
@@ -30,7 +30,7 @@ function M.get_os_name()
         if package.config:sub(1,1) == '\\' then
             -- Windows
             local env_OS = os.getenv('OS')
-            local env_ARCH = os.getenv('PROCESSOR_ARCHITECTURE')
+	    local env_ARCH = os.getenv('PROCESSOR_ARCHITEW6432') or os.getenv('PROCESSOR_ARCHITECTURE')
             -- print( ("Debug: %q %q"):format( env_OS, env_ARCH ) )
             if env_OS and env_ARCH then
                 raw_os_name, raw_arch_name = env_OS, env_ARCH
