@@ -2867,9 +2867,7 @@ Map_Vanish:	include "_maps/Special Stage Entry (Unused).asm"
 ; ===========================================================================
 ; >>> Collision subroutines for Sonic and other objects
 		include "obj/Sonic AnglePos.asm"
-		include "obj/sub FindNearestTile.asm"
-		include "obj/sub FindFloor.asm"
-		include "obj/sub FindWall.asm"
+		include "obj/sub FindNearestTile & FindFloor & FindWall.asm"
 		include	"_include/ConvertCollisionArray (Unused).asm"
 		include	"obj/Sonic Collision.asm"
 
